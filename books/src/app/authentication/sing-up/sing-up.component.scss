@@ -1,0 +1,80 @@
+.sign-up-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .title {
+    color: #ff6825;
+    font-family: "Oswald";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 24px;
+    align-self: baseline;
+    margin-bottom: 15px;
+  }
+  .label {
+    color: #fff;
+    font-family: "Oswald";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 55px;
+    margin-bottom: 8px;
+  }
+  .action-block {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 25px;
+  }
+}
+.label-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.form-group {
+  width: 100%;
+  position: relative;
+}
+.auth-component {
+  max-width: 500px;
+  width: 100%;
+  background-color: #3f3f3f;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 55px 101px;
+  margin: 20px auto;
+}
+.forgot-password-link {
+  color: #ffffff;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+}
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  input {
+    width: 100%;
+    background: #868686;
+    border: 0;
+    height: 60px;
+  }
+}
+
+.sign-up-description {
+  margin-top: 85px;
+  margin-bottom: 13px;
+  color: #fff;
+}
+.remember-checkbox {
+  color: #ffffff;
+}
+.orange {
+  color: #ff6825;
+}
