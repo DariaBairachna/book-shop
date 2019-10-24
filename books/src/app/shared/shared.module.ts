@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatButtonModule} from '@angular/material/button';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [],
   imports: [
@@ -15,7 +16,6 @@ import { BrowserModule } from '@angular/platform-browser';
     FormsModule,
     MatCheckboxModule,
     MatButtonModule,
-    BrowserModule,
     ReactiveFormsModule,
   ],
   exports:[
@@ -24,7 +24,6 @@ import { BrowserModule } from '@angular/platform-browser';
     FormsModule,
     MatCheckboxModule,
     MatButtonModule,
-    BrowserModule,
     ReactiveFormsModule,
   ]
 })

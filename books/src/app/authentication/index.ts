@@ -1,2 +1,2 @@
 export * from './login/login.component';
-export * from './sing-up/sing-up.component';
+export * from './sign-up/sign-up.component';

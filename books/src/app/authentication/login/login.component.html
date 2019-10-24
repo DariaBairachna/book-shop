@@ -3,20 +3,30 @@
     <div class="auth-component">
       <img src="./assets/img/user-photo.svg" alt="user">
       <h2 class="title">Sign-In</h2>
-      <form class="login-form" [formGroup]="loginForm">
-        <div class="form-group" >
+      <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
           <label for="email" class="label">Email</label>
           <input matInput id="email" formControlName="email">
+          <ul class="error" *ngIf="loginForm.get('email').invalid && loginForm.get('email').touched">
+            <li *ngIf="loginForm.get('email').errors.required">Required field</li>
+            <li *ngIf="loginForm.get('email').errors.email && !loginForm.get('email').errors.required">Invalid email
+            </li>
+          </ul>
         </div>
         <div class="form-group">
           <div class="label-wrapper">
             <label for="password" class="label">Password</label>
-            <a href="/forgot-password" class="forgot-password-link">Forgot Your Password?</a></div>
+            <a href="/forgot-password" class="forgot-password-link">Forgot Your Password?</a>
+          </div>
           <input matInput id="password" formControlName="password">
+          <ul class="error" *ngIf="loginForm.get('password').invalid && loginForm.get('password').touched">
+            <li *ngIf="loginForm.get('password').errors.required">Required field</li>
+            <li *ngIf="loginForm.get('password').errors.pattern">Invalid password</li>
+          </ul>
         </div>
         <div class="action-block">
           <mat-checkbox class="remember-checkbox">Remember me</mat-checkbox>
-          <button class="orange-btn" mat-button type="button">Sign-in</button>
+          <button class="orange-btn" mat-button type="submit">Sign-in</button>
         </div>
       </form>
       <div class="sign-up-description">New to Book Publishing Company?</div>

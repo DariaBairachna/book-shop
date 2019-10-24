@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { AuthentificationRoutingModule } from './authentification-routing.module';
 import { SharedModule } from '../shared/shared.module';
-import { ValidationService } from '../service/validation.service';
+import { LocalSlorageService } from '../service/localSlorage.service';
 import { LoginComponent, SingUpComponent } from '.';
 
 @NgModule({
@@ -14,7 +14,7 @@ import { LoginComponent, SingUpComponent } from '.';
     SharedModule,
   ],
   providers:[
-    ValidationService 
+
   ]
 })
 export class AuthenticationModule { }
