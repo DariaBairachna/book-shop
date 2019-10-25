@@ -12,7 +12,7 @@ import { LocalSlorageService } from '.';
 
 
 export class AuthentificationService {
-
+  public curentUser: boolean;
   constructor(
     private http: HttpClient,
     private localSlorageService: LocalSlorageService) { }
@@ -29,12 +29,17 @@ export class AuthentificationService {
     return this.http.post(`${environment.apiUrl}/users/authenticate`, userData)
   }
 
+  public forgotPassword(email: string) {
+    return this.http.post(`${environment.apiUrl}/users/authenticate`, email)
+  }
+
+
   public isLogin() {
     if (this.localSlorageService.getItem('currentUser')) {
-      return true;
+      return this.curentUser = true;
     }
 
-    return false;
+    return this.curentUser = false;
 
   }
 

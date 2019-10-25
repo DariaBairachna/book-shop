@@ -13,11 +13,11 @@ import { LocalSlorageService, AuthentificationService } from '../../service';
 export class SingUpComponent implements OnInit {
   public signUpForm: FormGroup
   constructor(
-    private fb: FormBuilder,
+    private formBuilder: FormBuilder,
     private authService: AuthentificationService,
     private localSlorageService: LocalSlorageService,
     private router: Router) {
-    this.signUpForm = this.fb.group({
+    this.signUpForm = this.formBuilder.group({
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required, Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$')]),
       firstName: new FormControl('', [Validators.required, Validators.minLength(3)]),
@@ -30,13 +30,17 @@ export class SingUpComponent implements OnInit {
 
 
   public onSubmit() {
-    this.router.navigate(['/login']);
+    if (this.signUpForm.invalid) {
+      return false;
+
+    }
+    
     this.authService.signUp(this.signUpForm.value).subscribe((response: User) => {
    
       return response;
 
     })
-
+    this.router.navigate(['/login']);
     //for add default user
     this.localSlorageService.setItem('defaultUser', { email: "a@dd.ddd", password: "d@1Effffff" });
 

@@ -14,12 +14,12 @@ export class LoginComponent implements OnInit {
   public loginForm: FormGroup;
   public isLogin: boolean;
   constructor(
-    private fb: FormBuilder,
+    private formBuilder: FormBuilder,
     private authService: AuthentificationService,
     private localSlorageService: LocalSlorageService,
     private router: Router,
   ) {
-    this.loginForm = this.fb.group({
+    this.loginForm = this.formBuilder.group({
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required, Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$')]),
     })
@@ -29,16 +29,19 @@ export class LoginComponent implements OnInit {
   }
 
   public onSubmit() {
+    if (this.loginForm.invalid) {
+      return false;
 
+    }
     this.authService.login(this.loginForm.value).subscribe((response: LoginData) => {
       if (response) {
         this.localSlorageService.setItem('currentUser', response);
         this.isLogin = !this.isLogin;
       }
-     let user = JSON.parse(this.localSlorageService.getItem('defaultUser')); 
+      let user = JSON.parse(this.localSlorageService.getItem('defaultUser'));
       if (!response && (user == this.loginForm.value)) {
         this.localSlorageService.setItem('defaultLogedUser', user);
-
+        this.isLogin = !this.isLogin;
       }
       return response;
     });

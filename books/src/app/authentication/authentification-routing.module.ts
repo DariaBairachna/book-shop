@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { LoginComponent, SingUpComponent } from '.';
+import { LoginComponent, SingUpComponent, ForgotPasswordComponent } from '.';
 
 
 
@@ -17,6 +17,10 @@ const routes: Routes = [
     {
         path: 'sign-up',
         component: SingUpComponent
+    },
+    {
+        path: 'forgot-password',
+        component: ForgotPasswordComponent
     }
 
 ];

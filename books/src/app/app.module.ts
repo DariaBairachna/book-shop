@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from './shared/layout/layout.module';
 import { HttpClientModule } from '@angular/common/http';
+import { AlertComponent } from './shared/dialog/alert/alert.component';
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import { HttpClientModule } from '@angular/common/http';
     NgbModule,
     HttpClientModule 
   ],
+ 
   providers: [],
   bootstrap: [AppComponent]
 })

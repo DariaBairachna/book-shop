@@ -5,8 +5,9 @@ import {MatInputModule} from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatButtonModule} from '@angular/material/button';
-import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import {MatDialogModule} from '@angular/material/dialog';
+import { DialogModule } from './dialog/dialog.module';
+import { AlertComponent } from './dialog';
 @NgModule({
   declarations: [],
   imports: [
@@ -17,6 +18,8 @@ import { HttpClientModule } from '@angular/common/http';
     MatCheckboxModule,
     MatButtonModule,
     ReactiveFormsModule,
+    MatDialogModule,
+    DialogModule
   ],
   exports:[
     MatFormFieldModule,
@@ -25,6 +28,11 @@ import { HttpClientModule } from '@angular/common/http';
     MatCheckboxModule,
     MatButtonModule,
     ReactiveFormsModule,
-  ]
+    MatDialogModule,
+    DialogModule
+  ],
+  entryComponents: [
+    AlertComponent,
+  ],
 })
 export class SharedModule { }
