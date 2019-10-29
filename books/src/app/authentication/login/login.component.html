@@ -6,7 +6,7 @@
       <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
           <label for="email" class="label">Email</label>
-          <input matInput id="email" formControlName="email">
+          <input matInput id="email" formControlName="email" >
           <ul class="error" *ngIf="loginForm.get('email').invalid && loginForm.get('email').touched">
             <li *ngIf="loginForm.get('email').errors.required">Required field</li>
             <li *ngIf="loginForm.get('email').errors.email && !loginForm.get('email').errors.required">Invalid email
@@ -21,11 +21,11 @@
           <input matInput id="password" formControlName="password">
           <ul class="error" *ngIf="loginForm.get('password').invalid && loginForm.get('password').touched">
             <li *ngIf="loginForm.get('password').errors.required">Required field</li>
-            <li *ngIf="loginForm.get('password').errors.pattern">Invalid password</li>
+            <li *ngIf="!loginForm.get('password').errors.required && loginForm.get('password').errors.validPassword">Invalid password</li>
           </ul>
         </div>
         <div class="action-block">
-          <mat-checkbox class="remember-checkbox">Remember me</mat-checkbox>
+          <mat-checkbox class="remember-checkbox" formControlName="rememberCheckbox" >Remember me</mat-checkbox>
           <button class="orange-btn" mat-button type="submit">Sign-in</button>
         </div>
       </form>

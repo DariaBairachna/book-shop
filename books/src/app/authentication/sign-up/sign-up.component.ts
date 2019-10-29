@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
-import { User } from '../../model';
-import { LocalSlorageService, AuthentificationService } from '../../service';
+import { User } from 'app/shared/models';
+import { ValidationService, LocalSlorageService, AuthentificationService } from 'app/services';
 
 
 @Component({
@@ -16,10 +16,11 @@ export class SingUpComponent implements OnInit {
     private formBuilder: FormBuilder,
     private authService: AuthentificationService,
     private localSlorageService: LocalSlorageService,
-    private router: Router) {
+    private router: Router,
+    private validationService: ValidationService) {
     this.signUpForm = this.formBuilder.group({
       email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [Validators.required, Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$')]),
+      password: new FormControl('', [Validators.required, this.validationService.validatePassword]),
       firstName: new FormControl('', [Validators.required, Validators.minLength(3)]),
       lastName: new FormControl('', [Validators.required, Validators.minLength(3)])
     })
@@ -28,15 +29,14 @@ export class SingUpComponent implements OnInit {
   ngOnInit() {
   }
 
-
   public onSubmit() {
     if (this.signUpForm.invalid) {
       return false;
 
     }
-    
+
     this.authService.signUp(this.signUpForm.value).subscribe((response: User) => {
-   
+
       return response;
 
     })

@@ -1,12 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { AuthentificationService } from 'app/service';
+import { AuthentificationService } from 'app/services';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { AlertComponent } from '../../shared/dialog';
-
-// import { AlertComponent } from 'app/shared/dialog';
-
+import { AlertComponent } from 'app/alert/alert.component';
 @Component({
   selector: 'app-forgot-password',
   templateUrl: './forgot-password.component.html',
@@ -20,7 +17,6 @@ export class ForgotPasswordComponent implements OnInit {
     private authService: AuthentificationService,
     private router: Router,
     public dialog: MatDialog,
-    // private alertComponent: AlertComponent,
   ) {
     this.forgotPasswordForm = this.formBuilder.group({
       email: new FormControl('', [Validators.required, Validators.email])
@@ -48,7 +44,7 @@ export class ForgotPasswordComponent implements OnInit {
     if (this.forgotPasswordForm.invalid) {
       return false;
     }
-    this.authService.login(this.forgotPasswordForm.value).subscribe(
+    this.authService.forgotPassword(this.forgotPasswordForm.value).subscribe(
       (response: object) => {
 
         if (response) {

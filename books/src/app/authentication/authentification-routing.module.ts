@@ -9,18 +9,21 @@ const routes: Routes = [
         path: '',
         redirectTo: 'login',
         pathMatch: 'full'
-      },
+    },
     {
         path: 'login',
-        component: LoginComponent
+        component: LoginComponent,
+        data: { title: "Login | Books" }
     },
     {
         path: 'sign-up',
-        component: SingUpComponent
+        component: SingUpComponent,
+        data: { title: "Sign Up | Books" }
     },
     {
         path: 'forgot-password',
-        component: ForgotPasswordComponent
+        component: ForgotPasswordComponent,
+        data: { title: "Forgot Password | Books" }
     }
 
 ];
@@ -30,6 +33,4 @@ const routes: Routes = [
     exports: [RouterModule]
 })
 export class AuthentificationRoutingModule {
-
-
 }
