@@ -6,6 +6,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatTableModule} from '@angular/material/table';
 import {MatIconModule} from '@angular/material/icon';
+import {MatSelectModule} from '@angular/material/select';
 @NgModule({
   declarations: [],
   imports: [
@@ -15,6 +16,7 @@ import {MatIconModule} from '@angular/material/icon';
     MatButtonModule,
     MatDialogModule,
     MatTableModule,
+    MatSelectModule,
     MatIconModule,
   ],
   exports:[
@@ -25,9 +27,8 @@ import {MatIconModule} from '@angular/material/icon';
     MatDialogModule,
     MatTableModule,
     MatIconModule,
+    MatSelectModule,
   ],
-  entryComponents: [
 
-  ],
 })
 export class SharedMaterialModule { }

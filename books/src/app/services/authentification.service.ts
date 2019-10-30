@@ -15,20 +15,20 @@ export class AuthentificationService {
     private http: HttpClient,
     private localSlorageService: LocalSlorageService) { }
 
-  public login(loginData: LoginData): Observable<object> {
-    return this.http.post(`${environment.apiUrl}/users/authenticate`, loginData)
+  public login(loginData: LoginData): Observable<LoginData> {
+    return this.http.post<LoginData>(`${environment.apiUrl}/users/authenticate`, loginData)
   }
   public logout(): void {
     this.localSlorageService.removeItem('currentUser');
 
   }
 
-  public signUp(userData: User) {
-    return this.http.post(`${environment.apiUrl}/users/authenticate`, userData)
+  public signUp(userData: User): Observable<User> {
+    return this.http.post<User>(`${environment.apiUrl}/users/authenticate`, userData)
   }
 
-  public forgotPassword(email: string) {
-    return this.http.post(`${environment.apiUrl}/users/authenticate`, email)
+  public forgotPassword(email: string): Observable<string> {
+    return this.http.post<string>(`${environment.apiUrl}/users/authenticate`, email)
   }
 
 

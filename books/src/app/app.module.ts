@@ -7,7 +7,6 @@ import { LayoutModule } from './shared/layout/layout.module';
 import { AlertComponent } from './alert/alert.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CoreModule } from './core/core.module';
-
 @NgModule({
   declarations: [
     AppComponent,

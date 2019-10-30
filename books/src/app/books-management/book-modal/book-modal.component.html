@@ -1,0 +1,59 @@
+<div class="book-modal">
+    <h1 mat-dialog-title>{{data.titleModal}}</h1>
+    <div mat-dialog-content>
+        <form action="" class="book-form row">
+            <div class="col-md-6">
+                <div class="field">
+                    <label for="title">Title</label>
+                    <input matInput name="title" type="text" id="title" [(ngModel)]="data.title">
+                </div>
+                <div class="field">
+                    <label for="description">Description</label>
+                    <textarea matInput id="description" name="description" cols="30" rows="10"
+                        [(ngModel)]="data.description"></textarea>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label for="image-upload"></label>
+                <input class="add-photo" type="file">
+                <div class="input-preview">
+                    <img id="imagePreview" src="./assets/img/Vector.png">
+                   
+                </div>
+                <div class="field">
+                    <label for="category">Category</label>
+                    <mat-select id="category" name="category">
+                        <mat-option *ngFor="let category of categories" [value]="data.category">
+                            {{category.value}}
+                        </mat-option>
+                    </mat-select>
+                </div>
+                <div class="field">
+                    <label for="autor">Autor</label>
+                    <mat-select id="autor" name="autor">
+                        <mat-option *ngFor="let autor of autors" [value]="data.value">
+                            {{autor.value}}
+                        </mat-option>
+                    </mat-select>
+                </div>
+                <div class="field">
+                    <label for="price">Price</label>
+                    <input type="text" matInput id="price" name="price" [(ngModel)]="data.price">
+                </div>
+                <div class="field">
+                    <label for="currency">Currency</label>
+                    <mat-select id="currency" name="currency">
+                        <mat-option *ngFor="let currency of currencys" [value]="currency.value">
+                            {{currency.value}}
+                        </mat-option>
+                    </mat-select>
+                </div>
+
+            </div>
+            <div mat-dialog-actions>
+                <button mat-button (click)="onNoClick()">No Thanks</button>
+                <button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>Ok</button>
+            </div>
+        </form>
+    </div>
+</div>

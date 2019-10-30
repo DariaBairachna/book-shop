@@ -1,0 +1,51 @@
+.product-table {
+  width: 100%;
+}
+.subtitle {
+  font-family: "Oswald";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 55px;
+  padding: 0 24px;
+}
+.table-header {
+  background: #4e4e4e;
+  color: #fff;
+}
+.general-titel {
+  padding: 24px 0;
+}
+.page-titel {
+ 
+  font-family: "Oswald";
+  font-style: normal;
+  font-weight: bold;
+  font-size: 48px;
+  line-height: 55px;
+}
+.control-btn{
+    min-width: 40px;
+}
+.controls-header{
+    width: 136px;
+}
+.titel-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 44px;
+}
+.add-book-btn{
+    min-width: 40px;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:hover, &:focus{
+        outline: none;
+    } 
+}

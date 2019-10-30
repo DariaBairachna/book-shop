@@ -45,7 +45,7 @@ export class ForgotPasswordComponent implements OnInit {
       return false;
     }
     this.authService.forgotPassword(this.forgotPasswordForm.value).subscribe(
-      (response: object) => {
+      (response: string) => {
 
         if (response) {
           this.router.navigate(['/home']);
