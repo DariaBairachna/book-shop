@@ -1,6 +1,7 @@
 export interface Book {
     id: string;
-    name: string;
+    cover?: string;
+    title: string;
     description: string;
     category: string;
     author: Array<string>;

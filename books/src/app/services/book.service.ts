@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { LoginData, User, Book } from '../shared/models';
+import { Book } from '../shared/models';
 import { Observable } from 'rxjs';
 import { environment } from 'environments/environment';
 import { LocalSlorageService } from '.';
@@ -9,7 +9,7 @@ import { LocalSlorageService } from '.';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthentificationService {
+export class BookService {
   
   constructor(
     private http: HttpClient,
@@ -29,7 +29,7 @@ export class AuthentificationService {
     return this.http.put<Book>(`${environment.apiUrl}/books/${id}`, data)
   }
 
-  public delete(id: string) {
+  public deleteBook(id: string) {
     return this.http.delete(`${environment.apiUrl}/books/${id}`)
   }
 

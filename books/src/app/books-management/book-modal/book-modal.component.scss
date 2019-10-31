@@ -1,36 +1,86 @@
+.modal-title {
+  font-family: "Oswald";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 55px;
+  line-height: 55px;
+  text-align: center;
+  color: #ff6825;
+}
 .field {
   display: flex;
   margin-bottom: 18px;
   justify-content: space-between;
-  input, textarea {
+  align-items: center;
+  label {
+    font-family: "Oswald";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    color: #fefefe;
+  }
+  input,
+  textarea {
     width: 100%;
     background: #868686;
     border: 0;
     height: 60px;
     padding: 5px;
-    width: 250px;
+    width: 75%;
+  }
+  textarea {
+    resize: none;
+    height: 200px;
   }
 }
 
-
-::ng-deep .cdk-overlay-pane{
-    .mat-dialog-container{
+::ng-deep .cdk-overlay-pane {
+  .mat-dialog-container {
     background-color: #3f3f3f;
   }
-  .mat-dialog-content{
+  .mat-dialog-content {
     max-height: 100vh;
-    height: 800px;
+    height: 530px;
   }
-  .mat-select{
+  .mat-select {
     width: 100%;
     background: #868686;
     border: 0;
     height: 60px;
     padding: 5px;
-    width: 250px;
+    width: 75%;
+  }
+}
+.img-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  flex-direction: column;
+  margin-bottom: 24px;
+}
+
+.image-upload {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  .label {
+    margin-top: 10px;
+    color: #fefefe;
   }
 }
 
-.add-photo{
-    
+.add-photo {
+  display: none;
+}
+
+.input-preview {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-wrapper{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }

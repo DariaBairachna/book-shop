@@ -1,17 +1,24 @@
-.orange-btn{
-    background-color: #FB7134;
-    height: 52px;
-    color: #fff;
+.orange-btn {
+  background-color: #fb7134;
+  height: 52px;
+  color: #fff;
 }
-.outline-btn{
-    width: 234px;
-    height: 52px;
-    border: 2px solid #F9621F;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    color: #B9B8B7;
-    &:hover{
-        color: #F9621F;
-    }
+
+.outline-btn {
+  width: 234px;
+  height: 52px;
+  border: 2px solid #f9621f;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  color: #b9b8b7;
+  &:hover {
+    color: #f9621f;
+  }
+}
+.cancel-btn {
+  &.outline-btn {
+    border: 2px solid #f9621f;
+    width: max-content;
+  }
 }
