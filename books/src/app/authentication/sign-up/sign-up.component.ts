@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
-import { User } from 'app/shared/models';
+import { UserViewModel } from 'app/shared/models';
 import { ValidationService, LocalSlorageService, AuthentificationService } from 'app/services';
 
 
@@ -35,7 +35,7 @@ export class SingUpComponent implements OnInit {
 
     }
 
-    this.authService.signUp(this.signUpForm.value).subscribe((response: User) => {
+    this.authService.signUp(this.signUpForm.value).subscribe((response: UserViewModel) => {
 
       return response;
 

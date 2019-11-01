@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { LoginData, User } from '../shared/models';
+import { LoginDataViewModel, UserViewModel } from '../shared/models';
 import { Observable } from 'rxjs';
 import { environment } from 'environments/environment';
 import { LocalSlorageService } from '.';
@@ -15,16 +15,16 @@ export class AuthentificationService {
     private http: HttpClient,
     private localSlorageService: LocalSlorageService) { }
 
-  public login(loginData: LoginData): Observable<LoginData> {
-    return this.http.post<LoginData>(`${environment.apiUrl}/users/authenticate`, loginData)
+  public login(loginData: LoginDataViewModel): Observable<LoginDataViewModel> {
+    return this.http.post<LoginDataViewModel>(`${environment.apiUrl}/users/authenticate`, loginData)
   }
   public logout(): void {
     this.localSlorageService.removeItem('currentUser');
 
   }
 
-  public signUp(userData: User): Observable<User> {
-    return this.http.post<User>(`${environment.apiUrl}/users/authenticate`, userData)
+  public signUp(userData: UserViewModel): Observable<UserViewModel> {
+    return this.http.post<UserViewModel>(`${environment.apiUrl}/users/authenticate`, userData)
   }
 
   public forgotPassword(email: string): Observable<string> {

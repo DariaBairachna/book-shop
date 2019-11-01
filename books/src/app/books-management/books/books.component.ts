@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, DoCheck, ChangeDetectorRef } from '@angular/core';
-import { Book } from 'app/shared/models';
+import { BookViewModel } from 'app/shared/models';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
@@ -12,7 +12,7 @@ import { BookService, LocalSlorageService } from 'app/services';
   styleUrls: ['./books.component.scss']
 })
 export class BooksComponent implements OnInit {
-  public bookData: Book[] = [];
+  public bookData: BookViewModel[] = [];
   public displayedColumns: string[] = ['id', 'title', 'description', 'category', 'author', 'price', 'controls'];
   public dataSource = new MatTableDataSource(this.bookData);
   public idValue: string;
@@ -22,7 +22,7 @@ export class BooksComponent implements OnInit {
     public dialog: MatDialog,
     private bookService: BookService,
     private localStorageService: LocalSlorageService,
-    private ref: ChangeDetectorRef) {
+    ) {
 
   }
 
@@ -32,11 +32,9 @@ export class BooksComponent implements OnInit {
 
   }
 
-
   public getBooks(): void {
     this.bookService.getBooks().subscribe(
-
-      (response: Book[]) => {
+      (response: BookViewModel[]) => {
         this.bookData = response;
       },
       (error) => {
@@ -54,7 +52,7 @@ export class BooksComponent implements OnInit {
     return this.idValue = Math.random().toString(36).substr(2, 9);
   }
 
-  public addBook(): any {
+  public addBook(){
     const dialogRef = this.dialog.open(BookModalComponent, {
       width: '70vw',
       data: { titleModal: 'Add new book', id: '', title: '', description: '', category: '', author: '', currency: '', price: '' }
@@ -64,20 +62,17 @@ export class BooksComponent implements OnInit {
       result.id = this.generateId();
       const { titleModal, ...otherData } = result;
       this.bookService.addBook(otherData).subscribe(
-        (result) => {
-          console.log(otherData);
+        (response) => {
+          console.log(response);
         },
         (error) => {
           let bookArray = JSON.parse(this.localStorageService.getItem("books"));
-          // let bookArray = this.bookData;
           bookArray.push(otherData)
           this.bookData = [...this.bookData, otherData];
           this.localStorageService.setItem("books", bookArray);
 
         }
       )
-   
-
     });
   }
 
@@ -85,28 +80,23 @@ export class BooksComponent implements OnInit {
     this.bookService.deleteBook(id).subscribe(
       (response) => {
         if (response) {
-          let books = this.bookData.filter((item: Book) => {
+          let books = this.bookData.filter((item: BookViewModel) => {
             return item.id !== id;
           });
           this.bookData = books;
         }
       },
       (error) => {
-        let books = this.bookData.filter((item: Book) => {
+        let books = this.bookData.filter((item: BookViewModel) => {
           return item.id !== id;
-          // if (item.id === id) {
-          //   books.splice(index, 1);
-          //   return books;
-          // }
         });
         this.localStorageService.setItem("books", books);
         this.bookData = books;
       }
     );
-
   }
 
-  public updateBook(element: Book): void {
+  public updateBook(element: BookViewModel): void {
 
     // id: string, updatedData: Book
     const dialogRef = this.dialog.open(BookModalComponent, {
@@ -118,18 +108,19 @@ export class BooksComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       let { titleModal, ...otherData } = result;
       updatingBookId = result.id
-      console.log(otherData);
-      console.log(titleModal)
-      // this.bookData = [...this.bookData, otherData];
       this.bookService.updateBook(updatingBookId, otherData).subscribe(
         (response) => {
-          if (result) {
-
-          }
+          let bookArray = this.bookData;
+          bookArray.map((item: BookViewModel, index: number) => {
+            if (item.id === updatingBookId) {
+              let data = { ...otherData }
+              bookArray.splice(index, 1, data);
+            }
+          });
         },
         (error) => {
-          let bookArray = JSON.parse(this.localStorageService.getItem("books"));
-          bookArray.map((item: Book, index: number) => {
+          let bookArray: BookViewModel[] = JSON.parse(this.localStorageService.getItem("books"));
+          bookArray.map((item: BookViewModel, index: number) => {
             if (item.id === updatingBookId) {
               let data = { ...otherData }
               bookArray.splice(index, 1, data);
@@ -139,12 +130,7 @@ export class BooksComponent implements OnInit {
           this.localStorageService.setItem("books", bookArray);
         }
       );
-
-
-
     });
-
-
   }
 }
 

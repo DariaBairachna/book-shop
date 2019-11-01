@@ -1,4 +1,4 @@
-export interface Book {
+export class BookViewModel {
     id: string;
     cover?: string;
     title: string;

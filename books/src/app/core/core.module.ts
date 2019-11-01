@@ -5,11 +5,10 @@ import { ErrorInterceptor } from './interceptors/error.interceptor';
 
 @NgModule({
     imports: [
-        CommonModule,
-        HttpClientModule,
+        HttpClientModule
     ],
     exports: [
-        CommonModule,
+        HttpClientModule
     ],
     providers: [{
         provide: HTTP_INTERCEPTORS,
@@ -18,5 +17,7 @@ import { ErrorInterceptor } from './interceptors/error.interceptor';
     }]
 })
 export class CoreModule {
-
+    constructor(){
+        
+    }
 }

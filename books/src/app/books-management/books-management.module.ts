@@ -4,6 +4,7 @@ import { SharedMaterialModule } from 'app/shared/shared-material.module';
 import { BooksComponent, BookModalComponent } from '.';
 import { BooksManagementRoutingModule } from './books-management-routing.module';
 import { MatInputModule } from '@angular/material/input';
+import { BookService } from 'app/services';
 
 @NgModule({
   declarations: [
@@ -14,14 +15,13 @@ import { MatInputModule } from '@angular/material/input';
     SharedModule,
     SharedMaterialModule,
     BooksManagementRoutingModule,
-    MatInputModule
   ],
   exports: [
     BooksComponent,
     BookModalComponent,
   ],
   providers:[
-
+    BookService
   ],
   entryComponents: [
     BookModalComponent,

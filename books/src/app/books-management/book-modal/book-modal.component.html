@@ -54,7 +54,7 @@
 
             </div>
             <div mat-dialog-actions class="btn-wrapper">
-                <button mat-button (click)="onNoClick()" class="outline-btn cancel-btn">Cancel</button>
+                <button mat-button (click)="close()" class="outline-btn cancel-btn">Cancel</button>
                 <button mat-button [mat-dialog-close]="data" (click)="saveBook()" class="orange-btn" cdkFocusInitial>Save</button>
             </div>
         </form>

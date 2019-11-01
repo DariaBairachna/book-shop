@@ -13,19 +13,14 @@ import { CoreModule } from './core/core.module';
     AlertComponent,
   ],
   imports: [
-    LayoutModule,
     BrowserModule,
+    CoreModule,
+    LayoutModule,
     AppRoutingModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    CoreModule
+    BrowserAnimationsModule
   ],
   entryComponents: [
     AlertComponent,
-  ],
-  exports: [
-    CoreModule
-    
   ],
   providers: [],
   bootstrap: [AppComponent]

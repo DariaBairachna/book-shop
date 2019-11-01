@@ -1,0 +1,16 @@
+<div class="author-modal">
+    <h1 mat-dialog-title class="modal-title">{{data.titleModal}}</h1>
+    <div mat-dialog-content>
+        <form action="" class="author-form">
+            <div class="field">
+                <label for="name">Name</label>
+                <input type="text" matInput id="name" name="name" [(ngModel)]="data.name">
+            </div>
+            <div mat-dialog-actions class="btn-wrapper">
+                <button mat-button (click)="close()" class="outline-btn cancel-btn">Cancel</button>
+                <button mat-button [mat-dialog-close]="data" (click)="saveAuthor()" class="orange-btn"
+                    cdkFocusInitial>Save</button>
+            </div>
+        </form>
+    </div>
+</div>

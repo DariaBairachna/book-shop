@@ -1,4 +1,4 @@
-export interface User{
+export interface UserViewModel{
     firstName: string,
     lastName: string,
     email: string,

@@ -1,7 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Book } from 'app/shared/models';
-import { LocalSlorageService, BookService } from 'app/services';
+import { BookViewModel } from 'app/shared/models';
 
 @Component({
   selector: 'app-book-modal',
@@ -13,23 +12,19 @@ export class BookModalComponent implements OnInit {
   public autors: Array<string>;
   public currencies: Array<string>;
   public author: string;
-  // public idValue: string;
+
   constructor(
     public dialogRef: MatDialogRef<BookModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
+
   }
 
-  onNoClick(): void {
+  public close(): void {
     this.dialogRef.close();
   }
 
-
-  // public generateId() {
-  //   return this.idValue = Math.random().toString(36).substr(2, 9);
-  // }
-
-  public saveBook(): Book {
+  public saveBook(): BookViewModel {
     return this.data
   }
 

@@ -1,4 +1,4 @@
-export interface Author {
+export interface AuthorViewModel {
     id: string;
     name: string;
    
