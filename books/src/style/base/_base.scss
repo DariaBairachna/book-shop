@@ -24,6 +24,9 @@ body {
 }
 .table {
   width: 100%;
+  td {
+    vertical-align: middle;
+  }
 }
 thead {
   th.table-header {

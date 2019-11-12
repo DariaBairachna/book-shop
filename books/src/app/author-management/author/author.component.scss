@@ -22,17 +22,17 @@
   margin-bottom: 44px;
   margin-top: 24px;
 }
-.add-book-btn {
-  min-width: 40px;
-  height: 40px;
-  width: 40px;
-  border-radius: 50%;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  &:hover,
-  &:focus {
+
+::ng-deep {
+  a {
+    text-decoration: none;
+    color: inherit;
+    &:hover {
+      text-decoration: none;
+      color: inherit;
+    }
+  }
+  button:focus{
     outline: none;
   }
 }

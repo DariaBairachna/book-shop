@@ -3,6 +3,7 @@ import { SharedModule } from 'app/shared/shared.module';
 import { SharedMaterialModule } from 'app/shared/shared-material.module';
 import { AuthorModalComponent, AuthorComponent } from '.';
 import { AuthorManagementRoutingModule } from './author-management-routing.module';
+import { AuthorService } from 'app/services';
 
 @NgModule({
   declarations: [
@@ -13,18 +14,18 @@ import { AuthorManagementRoutingModule } from './author-management-routing.modul
     SharedModule,
     SharedMaterialModule,
     AuthorManagementRoutingModule,
-    
+
   ],
   exports: [
     AuthorModalComponent,
     AuthorComponent,
   ],
-  providers:[
-
+  providers: [
+    AuthorService
   ],
   entryComponents: [
     AuthorModalComponent,
-    
+
   ]
 })
 export class AuthorManagementModule { }

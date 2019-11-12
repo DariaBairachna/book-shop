@@ -5,6 +5,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthorService, LocalSlorageService } from 'app/services';
 import { AuthorModalComponent } from '../author-modal/author-modal.component';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 
 @Component({
@@ -17,6 +19,8 @@ export class AuthorComponent implements OnInit {
   public displayedColumns: string[] = ['id', 'name', 'product', 'controls'];
   public dataSource = new MatTableDataSource(this.authorData);
   public idValue: string;
+  private destroyed: Subject<boolean> = new Subject<boolean>();
+
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
@@ -30,6 +34,10 @@ export class AuthorComponent implements OnInit {
     this.getAuthors();
   }
 
+  public generateId() {
+    return this.idValue = Math.random().toString(36).substr(2, 9);
+  }
+
   public addAuthor(): void {
     const dialogRef = this.dialog.open(AuthorModalComponent, {
       width: '70vw',
@@ -38,15 +46,20 @@ export class AuthorComponent implements OnInit {
 
 
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().pipe(takeUntil(this.destroyed)).subscribe((result) => {
+      if (!result) {
+       return
+         
+      }  
       result.id = this.generateId();
       const { titleModal, ...otherData } = result;
-      this.authorService.addAuthor(otherData).subscribe(
+    
+      this.authorService.addAuthor(otherData).pipe(takeUntil(this.destroyed)).subscribe(
         (response: AuthorViewModel) => {
           console.log(response);
         },
         (error) =>{
-          let authorArray = this.authorData;
+          let authorArray = JSON.parse(this.localStorageService.getItem("authors")) ;
           authorArray.push(otherData);
           this.authorData = [...this.authorData, otherData];
           this.localStorageService.setItem("authors", authorArray);
@@ -56,7 +69,7 @@ export class AuthorComponent implements OnInit {
     });
   }
   public getAuthors(): void {
-    this.authorService.getAuthors().subscribe(
+    this.authorService.getAuthors().pipe(takeUntil(this.destroyed)).subscribe(
       (response: AuthorViewModel[]) => {
         this.authorData = response;
       },
@@ -71,12 +84,10 @@ export class AuthorComponent implements OnInit {
     )
   }
 
-  public generateId() {
-    return this.idValue = Math.random().toString(36).substr(2, 9);
-  }
+
 
   public deleteAuthor(id: string): void {
-    this.authorService.deleteAuthor(id).subscribe(
+    this.authorService.deleteAuthor(id).pipe(takeUntil(this.destroyed)).subscribe(
       (response) => {
         if (response) {
           let authors = this.authorData.filter((item: AuthorViewModel) => { item.id !== id });
@@ -98,13 +109,13 @@ export class AuthorComponent implements OnInit {
     });
 
     let updatingAuthorId: string;
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().pipe(takeUntil(this.destroyed)).subscribe(result => {
       let { titleModal, ...otherData } = result;
       updatingAuthorId = result.id
-      this.authorService.updateAuthor(updatingAuthorId, otherData).subscribe(
+      this.authorService.updateAuthor(updatingAuthorId, otherData).pipe(takeUntil(this.destroyed)).subscribe(
         (response) => {
           let authorArray = this.authorData;
-          authorArray.map((item: AuthorViewModel, index: number) => {
+          authorArray.forEach((item: AuthorViewModel, index: number) => {
             if (item.id === updatingAuthorId) {
               let data = { ...otherData }
               authorArray.splice(index, 1, data);
@@ -113,7 +124,7 @@ export class AuthorComponent implements OnInit {
         },
         (error) => {
           let authorArray = JSON.parse(this.localStorageService.getItem("authors"));
-          authorArray.map((item: AuthorViewModel, index: number) => {
+          authorArray.forEach((item: AuthorViewModel, index: number) => {
             if (item.id === updatingAuthorId) {
               let data = { ...otherData }
               authorArray.splice(index, 1, data);
@@ -124,5 +135,10 @@ export class AuthorComponent implements OnInit {
         }
       );
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed.next();
+    this.destroyed.complete();
   }
 }

@@ -12,7 +12,6 @@
 }
 
 .page-titel {
-
   font-family: "Oswald";
   font-style: normal;
   font-weight: bold;
@@ -31,6 +30,24 @@
   justify-content: space-between;
   margin-bottom: 44px;
   margin-top: 24px;
+}
+
+::ng-deep {
+  a {
+    text-decoration: none;
+    color: inherit;
+    &:hover {
+      text-decoration: none;
+      color: inherit;
+    }
+  }
+  button:focus {
+    outline: none;
+  }
+}
+
+.description-cell {
+  width: 23%;
 }
 .add-book-btn {
   min-width: 40px;

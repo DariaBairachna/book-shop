@@ -12,13 +12,13 @@ export class AuthorModalComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<AuthorModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
+    ) {
   }
 
   ngOnInit() {
   }
 
-  public close(): void{
+  public close(): void {
     this.dialogRef.close();
   }
 

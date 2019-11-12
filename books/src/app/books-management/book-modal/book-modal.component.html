@@ -17,25 +17,25 @@
                 <div class="img-wrapper">
                     <label for="image-upload" class="image-upload">
                         <div class="input-preview">
-                            <img id="imagePreview" src="./assets/img/Vector.png">
+                            <img id="imagePreview" src="{{imageSrc}}">
                         </div>
                         <span class="label"> Change photo</span>
-                        <input class="add-photo" id="image-upload" name="cover" type="file" [(ngModel)]="data.cover">
+                        <input class="add-photo" id="image-upload" name="cover" type="file" (change)="uploadCover($event)">
                     </label>
                 </div>
                 <div class="field">
                     <label for="category">Category</label>
                     <mat-select id="category" name="category" [(ngModel)]="data.category">
-                        <mat-option *ngFor="let category of categories" [value]="category">
-                            {{category}}
+                        <mat-option *ngFor="let category of categories" [value]="category.category">
+                            {{category.category}}
                         </mat-option>
                     </mat-select>
                 </div>
                 <div class="field">
                     <label for="autor">Autor</label>
                     <mat-select id="autor" name="autor" [(ngModel)]="data.author">
-                        <mat-option *ngFor="let author of autors" [value]="author">
-                            {{author}}
+                        <mat-option *ngFor="let author of autors" [value]="author.name">
+                            {{author.name}}
                         </mat-option>
                     </mat-select>
                 </div>

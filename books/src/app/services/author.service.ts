@@ -4,12 +4,9 @@ import { Observable } from 'rxjs';
 import { environment } from 'environments/environment';
 import { AuthorViewModel } from 'app/shared/models';
 
-
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class AuthorService {
-  
+
   constructor(
     private http: HttpClient) { }
 
@@ -17,16 +14,15 @@ export class AuthorService {
     return this.http.get<AuthorViewModel[]>(`${environment.apiUrl}/autors`)
   }
 
-  public addAuthor(autor: AuthorViewModel): Observable<AuthorViewModel>  {
+  public addAuthor(autor: AuthorViewModel): Observable<AuthorViewModel> {
     return this.http.post<AuthorViewModel>(`${environment.apiUrl}/autors/${autor.id}`, autor)
   }
 
-  public updateAuthor(id: string, autor: AuthorViewModel ): Observable<AuthorViewModel> {
+  public updateAuthor(id: string, autor: AuthorViewModel): Observable<AuthorViewModel> {
     return this.http.put<AuthorViewModel>(`${environment.apiUrl}/autors/${id}`, autor)
   }
 
   public deleteAuthor(id: string) {
     return this.http.delete(`${environment.apiUrl}/autors/${id}`)
   }
-
 }

@@ -1,7 +1,11 @@
 <div class="container">
     <div class="titel-wrapper ">
         <h2 class="page-titel">Authors page</h2>
-        <button mat-button (click)="addAuthor()" class="add-author-btn">
+        <mat-menu #actionMenu="matMenu">
+            <a mat-menu-item [routerLink]="[ '/books-management']">Add book </a>
+            <button mat-menu-item (click)="addAuthor()">Add author</button>
+        </mat-menu>
+        <button mat-button [matMenuTriggerFor]="actionMenu" class="add-btn">
             <mat-icon aria-label="icon">add_circle</mat-icon>
         </button>
     </div>

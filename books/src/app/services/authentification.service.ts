@@ -1,22 +1,21 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { LoginDataViewModel, UserViewModel } from '../shared/models';
+import { LoginViewModel, UserViewModel } from '../shared/models';
 import { Observable } from 'rxjs';
 import { environment } from 'environments/environment';
 import { LocalSlorageService } from '.';
 
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class AuthentificationService {
   public curentUser: boolean;
   constructor(
     private http: HttpClient,
-    private localSlorageService: LocalSlorageService) { }
+    private localSlorageService: LocalSlorageService
+    ) { }
 
-  public login(loginData: LoginDataViewModel): Observable<LoginDataViewModel> {
-    return this.http.post<LoginDataViewModel>(`${environment.apiUrl}/users/authenticate`, loginData)
+  public login(loginData: LoginViewModel): Observable<LoginViewModel> {
+    return this.http.post<LoginViewModel>(`${environment.apiUrl}/users/authenticate`, loginData)
   }
   public logout(): void {
     this.localSlorageService.removeItem('currentUser');

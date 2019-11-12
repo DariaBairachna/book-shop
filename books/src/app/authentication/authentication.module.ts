@@ -4,7 +4,7 @@ import { SharedModule } from '../shared/shared.module';
 import { LoginComponent, SingUpComponent } from '.';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { SharedMaterialModule } from 'app/shared/shared-material.module';
-import { ValidationService } from 'app/services';
+import { ValidationService, AuthentificationService } from 'app/services';
 
 @NgModule({
   declarations: [LoginComponent, SingUpComponent, ForgotPasswordComponent],
@@ -14,7 +14,7 @@ import { ValidationService } from 'app/services';
     SharedMaterialModule,
   ],
   providers:[
-    ValidationService
+      AuthentificationService
   ]
 })
 export class AuthenticationModule { }

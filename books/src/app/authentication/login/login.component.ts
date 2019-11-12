@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { LoginDataViewModel } from 'app/shared/models';
+import { LoginViewModel } from 'app/shared/models';
 import { AuthentificationService, LocalSlorageService, ValidationService } from 'app/services';
 import { Router } from '@angular/router';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 
 @Component({
@@ -10,20 +12,19 @@ import { Router } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   public loginForm: FormGroup;
   public isLogin: boolean;
-
+  private destroyed: Subject<boolean> = new Subject<boolean>(); 
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthentificationService,
     private localSlorageService: LocalSlorageService,
     private router: Router,
-    private validationService: ValidationService,
   ) {
     this.loginForm = this.formBuilder.group({
       email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [Validators.required, this.validationService.validatePassword]),
+      password: new FormControl('', [Validators.required, ValidationService]),
       rememberCheckbox: new FormControl('', []),
     })
   }
@@ -31,7 +32,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     const savedUser = this.localSlorageService.getItem('savedUser');
     if (savedUser) {     
-      let savedUserValue: LoginDataViewModel = JSON.parse(savedUser);
+      let savedUserValue: LoginViewModel = JSON.parse(savedUser);
       let {email, password} = savedUserValue; 
       this.loginForm.setValue({
         email,
@@ -49,7 +50,7 @@ export class LoginComponent implements OnInit {
     if (this.isLogin) {
       this.router.navigate(['/home']);
     }
-    this.authService.login(this.loginForm.value).subscribe((response: LoginDataViewModel) => {
+    this.authService.login(this.loginForm.value).pipe(takeUntil(this.destroyed)).subscribe((response: LoginViewModel) => {
 
       if (response) {
         this.isLogin = !this.isLogin;
@@ -60,7 +61,7 @@ export class LoginComponent implements OnInit {
     },
       (reject) => {
         let user =this.localSlorageService.getItem('defaultUser');
-        let loginData: LoginDataViewModel = {
+        let loginData: LoginViewModel = {
           email: this.loginForm.value.email,
           password: this.loginForm.value.password
         }
@@ -70,13 +71,12 @@ export class LoginComponent implements OnInit {
           this.localSlorageService.setItem('defaultLogedUser', credentialData);
           this.router.navigate(['/home']);
           this.check(credentialData);
-          console.log(this.isLogin)
         }
       }
     );
   }
 
-  public check(credential: LoginDataViewModel) {
+  public check(credential: LoginViewModel) {
     if (this.loginForm.get('rememberCheckbox').value) {
       this.localSlorageService.setItem('savedUser', credential);
       this.isLogin = true;
@@ -84,7 +84,11 @@ export class LoginComponent implements OnInit {
     if (!this.loginForm.get('rememberCheckbox').value) {
       this.localSlorageService.removeItem('savedUser');
     }
+  }
 
+  ngOnDestroy(): void {
+    this.destroyed.next();
+    this.destroyed.complete(); 
   }
 
 }

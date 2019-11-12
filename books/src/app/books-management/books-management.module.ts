@@ -3,8 +3,7 @@ import { SharedModule } from 'app/shared/shared.module';
 import { SharedMaterialModule } from 'app/shared/shared-material.module';
 import { BooksComponent, BookModalComponent } from '.';
 import { BooksManagementRoutingModule } from './books-management-routing.module';
-import { MatInputModule } from '@angular/material/input';
-import { BookService } from 'app/services';
+import { BookService, LocalSlorageService, AuthorService } from 'app/services';
 
 @NgModule({
   declarations: [
@@ -21,7 +20,8 @@ import { BookService } from 'app/services';
     BookModalComponent,
   ],
   providers:[
-    BookService
+    BookService,
+    AuthorService
   ],
   entryComponents: [
     BookModalComponent,

@@ -37,10 +37,14 @@
 ::ng-deep .cdk-overlay-pane {
   .mat-dialog-container {
     background-color: #3f3f3f;
+
   }
   .mat-dialog-content {
     max-height: 100vh;
-    height: 530px;
+    min-height: 530px;
+    height: 100%;
+    padding-bottom: 30px;
+    padding-top: 30px;
   }
   .mat-select {
     width: 100%;
@@ -83,4 +87,13 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
+}
+
+.input-preview{
+  width: 100px;
+
+  img{
+    width: 100%;
+    display: inline-block;    
+  }
 }

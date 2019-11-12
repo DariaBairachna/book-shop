@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BookViewModel } from 'app/shared/models';
 import { Observable } from 'rxjs';
 import { environment } from 'environments/environment';
-import { LocalSlorageService } from '.';
+import { BooksManagementModule } from 'app/books-management/books-management.module';
 
 
 @Injectable()
@@ -11,7 +11,7 @@ export class BookService {
   
   constructor(
     private http: HttpClient,
-    private localSlorageService: LocalSlorageService) { }
+    ) { }
 
   public getBooks(): Observable<BookViewModel[]> {
     return this.http.get<BookViewModel[]>(`${environment.apiUrl}/books`)

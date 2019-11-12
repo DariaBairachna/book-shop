@@ -1,5 +1,4 @@
-export interface LoginDataViewModel {
-    email: string,
-    password: string,
-    token?: string,
+export class LoginViewModel {
+    email: string;
+    password: string;
 }

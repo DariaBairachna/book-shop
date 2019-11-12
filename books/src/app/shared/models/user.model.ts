@@ -1,7 +1,7 @@
-export interface UserViewModel{
-    firstName: string,
-    lastName: string,
-    email: string,
-    password: string,
-    tokeb: string,
+export class UserViewModel{
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    tokeb: string;
 }
