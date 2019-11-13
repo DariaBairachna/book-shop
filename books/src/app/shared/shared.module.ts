@@ -1,9 +1,12 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { FilterPipe } from './pipes';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    FilterPipe,
+  ],
   imports: [
     CommonModule,
     FormsModule,

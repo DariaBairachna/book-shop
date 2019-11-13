@@ -5,7 +5,6 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from './shared/layout/layout.module';
 import { AlertComponent } from './shared/components/alert/alert.component';
-import { HttpClientModule } from '@angular/common/http';
 import { CoreModule } from './core/core.module';
 @NgModule({
   declarations: [

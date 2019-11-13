@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { BookViewModel } from 'app/shared/models';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { BookModalComponent } from '../book-modal/book-modal.component';
@@ -30,6 +30,9 @@ export class BooksComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.dataSource.sort = this.sort;
+
+
+
     this.getBooks();
   }
 
@@ -37,6 +40,7 @@ export class BooksComponent implements OnInit, OnDestroy {
     this.bookService.getBooks().pipe(takeUntil(this.destroyed)).subscribe(
       (response: BookViewModel[]) => {
         this.bookData = response;
+        this.dataSource.sort = this.sort;
       },
       (error) => {
         let bookArray = this.localStorageService.getItem("books");
@@ -105,6 +109,15 @@ export class BooksComponent implements OnInit, OnDestroy {
       }
     );
   }
+
+
+test(event: any){
+  console.log( this.dataSource.sort);
+  console.log( this.dataSource);
+  console.log( this.sort);
+  console.log( this.bookData);
+
+}
 
   public updateBook(element: BookViewModel): void {
     const dialogRef = this.dialog.open(BookModalComponent, {
