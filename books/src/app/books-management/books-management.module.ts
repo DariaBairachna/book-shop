@@ -4,6 +4,7 @@ import { SharedMaterialModule } from 'app/shared/shared-material.module';
 import { BooksComponent, BookModalComponent } from '.';
 import { BooksManagementRoutingModule } from './books-management-routing.module';
 import { BookService, LocalSlorageService, AuthorService } from 'app/services';
+import { ComponentModule } from 'app/shared/components/component.module';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,7 @@ import { BookService, LocalSlorageService, AuthorService } from 'app/services';
   imports: [
     SharedModule,
     SharedMaterialModule,
+    ComponentModule,
     BooksManagementRoutingModule,
   ],
   exports: [

@@ -15,8 +15,9 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class BooksComponent implements OnInit, OnDestroy {
   public bookData: BookViewModel[] = [];
+  public filterValue: string;
   public displayedColumns: string[] = ['id', 'title', 'description', 'category', 'author', 'price', 'controls'];
-  public dataSource = new MatTableDataSource(this.bookData);
+  public dataSource: MatTableDataSource<BookViewModel>;
   public idValue: string;
   private destroyed: Subject<boolean> = new Subject();
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -26,26 +27,27 @@ export class BooksComponent implements OnInit, OnDestroy {
     private bookService: BookService,
     private localStorageService: LocalSlorageService,
   ) {
+    // this.dataSource = new MatTableDataSource(this.bookData);
+    // this.dataSource.sort = this.sort;
+    this.getBooks();
   }
 
   ngOnInit() {
-    this.dataSource.sort = this.sort;
 
-
-
-    this.getBooks();
   }
 
   public getBooks(): void {
     this.bookService.getBooks().pipe(takeUntil(this.destroyed)).subscribe(
       (response: BookViewModel[]) => {
         this.bookData = response;
+        this.dataSource = new MatTableDataSource(this.bookData);
         this.dataSource.sort = this.sort;
       },
       (error) => {
         let bookArray = this.localStorageService.getItem("books");
         this.bookData = JSON.parse(bookArray);
-
+        this.dataSource = new MatTableDataSource(this.bookData);
+        this.dataSource.sort = this.sort;
         if (!bookArray) {
           this.localStorageService.setItem("books", []);
         }
@@ -59,9 +61,7 @@ export class BooksComponent implements OnInit, OnDestroy {
 
   public applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
-    console.log(this.dataSource )
-    console.log("filterValue." + filterValue)
-  }
+   }
 
   public addBook() {
     const dialogRef = this.dialog.open(BookModalComponent, {
@@ -78,13 +78,16 @@ export class BooksComponent implements OnInit, OnDestroy {
       this.bookService.addBook(otherData).pipe(takeUntil(this.destroyed)).subscribe(
         (response) => {
           console.log(response);
+          this.dataSource = new MatTableDataSource(this.bookData);
+          this.dataSource.sort = this.sort;
         },
         (error) => {
           let bookArray = JSON.parse(this.localStorageService.getItem("books"));
           bookArray.push(otherData)
           this.bookData = [...this.bookData, otherData];
           this.localStorageService.setItem("books", bookArray);
-
+          this.dataSource = new MatTableDataSource(this.bookData);
+          this.dataSource.sort = this.sort;
         }
       )
     });
@@ -110,14 +113,6 @@ export class BooksComponent implements OnInit, OnDestroy {
     );
   }
 
-
-test(event: any){
-  console.log( this.dataSource.sort);
-  console.log( this.dataSource);
-  console.log( this.sort);
-  console.log( this.bookData);
-
-}
 
   public updateBook(element: BookViewModel): void {
     const dialogRef = this.dialog.open(BookModalComponent, {

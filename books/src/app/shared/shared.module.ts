@@ -15,7 +15,8 @@ import { FilterPipe } from './pipes';
   exports:[
     CommonModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FilterPipe,
   ],
  
 })

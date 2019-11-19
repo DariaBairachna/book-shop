@@ -33,14 +33,14 @@
                     <input matInput formControlName="password" id="password">
                     <ul class="error" *ngIf="signUpForm.get('password').invalid && signUpForm.get('password').touched">
                         <li *ngIf="signUpForm.get('password').errors.required">Required field</li>
-                        <li *ngIf="!signUpForm.get('password').errors.required && signUpForm.get('password').errors.validPassword">Invalid password</li>
+                        <li *ngIf="!signUpForm.get('password').errors.required && !signUpForm.get('password').errors.validPassword">Invalid password</li>
                     </ul>
                 </div>
                 <div class="action-block">
-                    <button class="orange-btn" mat-button type="submit">Sign up your account</button>
+                    <button-component [buttonData]="signUpButtonData"></button-component>
                 </div>
             </form>
-            <div class="sign-up-description">New to Book Publishing Company? <a href="/login" class="orange">Sign In</a>
+            <div class="sign-up-description">New to Book Publishing Company? <a [routerLink]="['/login']" class="orange" >Sign In</a>
             </div>
 
         </div>

@@ -32,7 +32,7 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
   public openDialog(): void {
     const dialogRef = this.dialog.open(AlertComponent, {
       width: '250px',
-
+      data: {content: 'Invalide email'}
     });
 
 
@@ -50,7 +50,7 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
       (response: string) => {
 
         if (response) {
-          this.router.navigate(['/home']);
+          this.router.navigate(['/books-management']);
         }
 
       },

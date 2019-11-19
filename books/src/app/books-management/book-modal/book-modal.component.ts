@@ -1,10 +1,11 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { BookViewModel, AuthorViewModel, CategoryViewModel } from 'app/shared/models';
+import { BookViewModel, AuthorViewModel, CategoryViewModel, ButtonViewModel } from 'app/shared/models';
 import { AuthorService, LocalSlorageService } from 'app/services';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { FileHelper } from 'app/shared/helpers/file.helper';
+import { FormGroup } from '@angular/forms';
 
 
 @Component({
@@ -14,10 +15,12 @@ import { FileHelper } from 'app/shared/helpers/file.helper';
   providers: [FileHelper]
 })
 export class BookModalComponent implements OnInit, OnDestroy {
+  public bookForm: FormGroup
   public categories: Array<CategoryViewModel>;
   public autors: Array<AuthorViewModel>;
   public currencies: Array<string>;
   public author: string;
+  public saveButtonData: ButtonViewModel = new ButtonViewModel;
   public imageSrc: string = "./assets/img/Vector.png";
   private destroyed: Subject<boolean> = new Subject();
   constructor(
@@ -27,7 +30,12 @@ export class BookModalComponent implements OnInit, OnDestroy {
     private localStorageService: LocalSlorageService,
     private fileHelper: FileHelper,
   ) {
-
+    this.saveButtonData = {
+      title: "Save",
+      class: "orange-btn",
+      loading: false,
+      disabled: true,
+    };
   }
 
   public close(): void {

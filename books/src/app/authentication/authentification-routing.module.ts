@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent, SingUpComponent, ForgotPasswordComponent } from '.';
+import { LoggedOutUserGuard } from 'app/core/guards';
 
 
 

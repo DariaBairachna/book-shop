@@ -56,7 +56,7 @@ export class AuthorComponent implements OnInit {
     
       this.authorService.addAuthor(otherData).pipe(takeUntil(this.destroyed)).subscribe(
         (response: AuthorViewModel) => {
-          console.log(response);
+
         },
         (error) =>{
           let authorArray = JSON.parse(this.localStorageService.getItem("authors")) ;
