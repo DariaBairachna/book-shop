@@ -1,7 +1,7 @@
 <div class="author-modal">
     <h1 mat-dialog-title class="modal-title">{{data.titleModal}}</h1>
-    <div mat-dialog-content>
-        <form action="" class="author-form">
+    <div mat-dialog-content class="form-wrapper">
+        <form action="" class="author-form"d>
             <div class="field">
                 <label for="name">Name</label>
                 <input type="text" matInput id="name" name="name" [(ngModel)]="data.name">
@@ -12,5 +12,7 @@
                     cdkFocusInitial>Save</button>
             </div>
         </form>
+        <loader *ngIf="loading" class="loading-form"></loader>
+        
     </div>
 </div>

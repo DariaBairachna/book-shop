@@ -1,14 +1,13 @@
 import { NgModule } from '@angular/core';
 import { AuthentificationRoutingModule } from './authentification-routing.module';
 import { SharedModule } from '../shared/shared.module';
-import { LoginComponent, SingUpComponent } from '.';
-import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { LoginComponent, SingUpComponent, ResetPasswordComponent, ForgotPasswordComponent } from '.';
 import { SharedMaterialModule } from 'app/shared/shared-material.module';
-import { AuthentificationService } from 'app/services';
+import { AuthentificationService, ValidationService } from 'app/services';
 import { ComponentModule } from 'app/shared/components/component.module';
 
 @NgModule({
-  declarations: [LoginComponent, SingUpComponent, ForgotPasswordComponent],
+  declarations: [LoginComponent, SingUpComponent, ForgotPasswordComponent, ResetPasswordComponent],
   imports: [
     AuthentificationRoutingModule,
     SharedModule,
@@ -16,7 +15,7 @@ import { ComponentModule } from 'app/shared/components/component.module';
     SharedMaterialModule,
   ],
   providers:[
-      AuthentificationService
+      AuthentificationService,
   ],
   
 })

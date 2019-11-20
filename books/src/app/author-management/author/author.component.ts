@@ -20,7 +20,7 @@ export class AuthorComponent implements OnInit {
   public dataSource = new MatTableDataSource(this.authorData);
   public idValue: string;
   private destroyed: Subject<boolean> = new Subject<boolean>();
-
+  public loading: boolean;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
@@ -43,9 +43,6 @@ export class AuthorComponent implements OnInit {
       width: '70vw',
       data: { titleModal: 'Add author', id: '', name: '' }
     });
-
-
-
     dialogRef.afterClosed().pipe(takeUntil(this.destroyed)).subscribe((result) => {
       if (!result) {
        return
@@ -69,14 +66,16 @@ export class AuthorComponent implements OnInit {
     });
   }
   public getAuthors(): void {
+    this.loading = true;
     this.authorService.getAuthors().pipe(takeUntil(this.destroyed)).subscribe(
       (response: AuthorViewModel[]) => {
         this.authorData = response;
+        this.loading = false;
       },
       (error) => {
         let authorArray = this.localStorageService.getItem("authors");
         this.authorData = JSON.parse(authorArray);
-
+        this.loading = false;
         if (!authorArray) {
           this.localStorageService.setItem("authors", []);
         }

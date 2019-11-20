@@ -8,14 +8,16 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./author-modal.component.scss']
 })
 export class AuthorModalComponent implements OnInit {
-
+  public loading: boolean;
   constructor(
     public dialogRef: MatDialogRef<AuthorModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
-    ) {
+  ) {
+    this.loading = true;
   }
 
   ngOnInit() {
+    this.loading = false;
   }
 
   public close(): void {

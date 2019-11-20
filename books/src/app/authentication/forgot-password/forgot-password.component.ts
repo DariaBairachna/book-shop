@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthentificationService } from 'app/services';
 import { Router } from '@angular/router';
@@ -37,8 +37,7 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
 
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-
+      this.router.navigate(['/reset-password']);
     });
   }
 
@@ -50,7 +49,7 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
       (response: string) => {
 
         if (response) {
-          this.router.navigate(['/books-management']);
+          this.router.navigate(['/reset-password']);
         }
 
       },

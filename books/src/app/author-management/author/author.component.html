@@ -40,4 +40,7 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+    <mat-card *ngIf="loading" class="loading-card">
+        <loader></loader>
+    </mat-card>
 </div>

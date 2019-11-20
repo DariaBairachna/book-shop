@@ -17,7 +17,7 @@ import { AlertComponent } from 'app/shared/components/alert/alert.component';
 export class LoginComponent implements OnInit, OnDestroy {
   public loginForm: FormGroup;
   public isLogin: boolean = false;
-  public signInButtonData: ButtonViewModel = new ButtonViewModel;
+  public signInButtonData: ButtonViewModel = new ButtonViewModel();
   private destroyed: Subject<boolean> = new Subject<boolean>();
   public returnUrl: string;
 

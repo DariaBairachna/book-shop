@@ -63,7 +63,6 @@
                 <button-component [buttonData]="saveButtonData" [mat-dialog-close]="bookForm.value"></button-component>
             </div>
         </form>
-        <loader class="loading-form"></loader>
-<!-- *ngIf="loading" -->
+        <loader *ngIf="loading" class="loading-form"></loader>
     </div>
 </div>

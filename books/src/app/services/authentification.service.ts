@@ -37,6 +37,10 @@ export class AuthentificationService {
   public forgotPassword(email: string): Observable<string> {
     return this.http.post<string>(`${environment.apiUrl}/users/authenticate`, email)
   }
+  public resetPassword(id:string, password: string): Observable<string>{
+return this.http.put<string>(`${environment.apiUrl}/users/${id}`, password)
+  }
+
 
   public isLogin() {
     if ((this.localSlorageService.getItem('currentUser') || this.localSlorageService.getItem('defaultLogedUser')) !== null) {
