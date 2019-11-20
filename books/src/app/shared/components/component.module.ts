@@ -1,14 +1,12 @@
 import { NgModule } from '@angular/core';
-import { ButtonComponent } from './buttons/button-component.component'
-import { AlertComponent } from './alert/alert.component';
 import { SharedModule } from '../shared.module';
-
-
+import { LoaderComponent, ButtonComponent, AlertComponent } from '.';
 
 @NgModule({
   declarations: [
     ButtonComponent,
     AlertComponent,
+    LoaderComponent,
   ],
   imports: [
     SharedModule
@@ -16,6 +14,7 @@ import { SharedModule } from '../shared.module';
   exports: [
     ButtonComponent,
     AlertComponent,
+    LoaderComponent,
   ],
   entryComponents: [
     AlertComponent,

@@ -5,7 +5,7 @@ import { AuthorService, LocalSlorageService } from 'app/services';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { FileHelper } from 'app/shared/helpers/file.helper';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 
 
 @Component({
@@ -23,31 +23,35 @@ export class BookModalComponent implements OnInit, OnDestroy {
   public saveButtonData: ButtonViewModel = new ButtonViewModel;
   public imageSrc: string = "./assets/img/Vector.png";
   private destroyed: Subject<boolean> = new Subject();
+  public loading: boolean;
   constructor(
     public dialogRef: MatDialogRef<BookModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private authorService: AuthorService,
     private localStorageService: LocalSlorageService,
     private fileHelper: FileHelper,
+    private formBuilder: FormBuilder,
   ) {
+
     this.saveButtonData = {
       title: "Save",
       class: "orange-btn",
       loading: false,
       disabled: true,
     };
-  }
 
-  public close(): void {
-    this.dialogRef.close();
-  }
-
-
-  public saveBook(): BookViewModel {
-    return this.data;
+    this.bookForm = this.formBuilder.group({
+      title: new FormControl(this.data.title, [Validators.required]),
+      description: new FormControl(this.data.description),
+      category: new FormControl(this.data.category, [Validators.required]),
+      author: new FormControl(this.data.author, [Validators.required]),
+      price: new FormControl(this.data.price),
+      currency: new FormControl(this.data.currency),
+    });
   }
 
   ngOnInit() {
+    this.getAuthors();
     this.categories = [{
       id: "123456",
       category: "Book"
@@ -57,13 +61,37 @@ export class BookModalComponent implements OnInit, OnDestroy {
       category: "Magazine"
     }];
     this.currencies = ["USD", "UAN"];
-    this.getAuthors();
+
+    if (!this.bookForm.invalid) {
+      this.saveButtonData.disabled = false;
+    }
+    this.bookForm.valueChanges.pipe(takeUntil(this.destroyed)).subscribe(data => {
+      if (!this.bookForm.invalid) {
+        this.saveButtonData.disabled = false;
+      }
+    }
+
+    )
+  }
+  public close(): void {
+    this.dialogRef.close();
   }
 
+
+  public saveBook(): BookViewModel {
+    this.data = this.bookForm.value;
+    this.saveButtonData.loading = true;
+    return this.data;
+  }
+
+
+
   public getAuthors(): void {
+    this.loading = true;
     this.authorService.getAuthors().pipe(takeUntil(this.destroyed)).subscribe(
       (response: AuthorViewModel[]) => {
         this.autors = response;
+        this.loading = false;
       },
       (error) => {
         let authorArray = this.localStorageService.getItem("authors");
@@ -71,12 +99,13 @@ export class BookModalComponent implements OnInit, OnDestroy {
         if (!authorArray) {
           this.localStorageService.setItem("authors", []);
         }
+        this.loading = false;
       }
     )
   }
 
   public uploadCover(event: any) {
-    this.fileHelper.uploadImage(event).pipe(takeUntil(this.destroyed)).subscribe(file => {this.imageSrc = file});
+    this.fileHelper.uploadImage(event).pipe(takeUntil(this.destroyed)).subscribe(file => { this.imageSrc = file });
   }
 
 

@@ -5,6 +5,7 @@ import { BooksComponent, BookModalComponent } from '.';
 import { BooksManagementRoutingModule } from './books-management-routing.module';
 import { BookService, LocalSlorageService, AuthorService } from 'app/services';
 import { ComponentModule } from 'app/shared/components/component.module';
+import { ToastrService, Toast } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -23,11 +24,11 @@ import { ComponentModule } from 'app/shared/components/component.module';
   ],
   providers:[
     BookService,
-    AuthorService
+    AuthorService,
+
   ],
   entryComponents: [
     BookModalComponent,
-    
   ]
 })
 export class BooksManagementModule { }

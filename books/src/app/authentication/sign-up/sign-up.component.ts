@@ -22,6 +22,7 @@ export class SingUpComponent implements OnInit, OnDestroy {
     private localSlorageService: LocalSlorageService,
     private router: Router,
   ) {
+ 
     this.signUpForm = this.formBuilder.group({
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required, ValidationService]),

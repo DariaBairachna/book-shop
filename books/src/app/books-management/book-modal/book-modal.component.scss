@@ -37,7 +37,7 @@
 ::ng-deep .cdk-overlay-pane {
   .mat-dialog-container {
     background-color: #3f3f3f;
-
+    padding-bottom: 0;
   }
   .mat-dialog-content {
     max-height: 100vh;
@@ -83,17 +83,29 @@
   justify-content: flex-end;
 }
 
-.btn-wrapper{
+.btn-wrapper {
   display: flex;
   justify-content: space-between;
   width: 100%;
 }
 
-.input-preview{
+.input-preview {
   width: 100px;
 
-  img{
+  img {
     width: 100%;
-    display: inline-block;    
+    display: inline-block;
   }
+}
+.loading-form {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  left: 0;
+}
+
+.form-wrapper{
+  position: relative;
 }

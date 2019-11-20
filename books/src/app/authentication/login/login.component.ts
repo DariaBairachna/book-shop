@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { LoginViewModel, ButtonViewModel } from 'app/shared/models';
 import { AuthentificationService, LocalSlorageService, ValidationService } from 'app/services';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
@@ -19,6 +19,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   public isLogin: boolean = false;
   public signInButtonData: ButtonViewModel = new ButtonViewModel;
   private destroyed: Subject<boolean> = new Subject<boolean>();
+  public returnUrl: string;
 
   constructor(
     public dialog: MatDialog,
@@ -26,6 +27,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private authService: AuthentificationService,
     private localSlorageService: LocalSlorageService,
     private router: Router,
+    private route: ActivatedRoute,
   ) {
     this.loginForm = this.formBuilder.group({
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -48,6 +50,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     const savedUser = this.localSlorageService.getItem('savedUser');
     if (savedUser) {
       let savedUserValue: LoginViewModel = JSON.parse(savedUser);
@@ -87,11 +90,12 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.router.navigate(['/books-management']);
     }
     this.authService.login(this.loginForm.value).pipe(takeUntil(this.destroyed)).subscribe((response: LoginViewModel) => {
-
+      
       if (response) {
         this.isLogin = !this.isLogin;
         this.localSlorageService.setItem('currentUser', response);
         this.check(response);
+        this.router.navigateByUrl(this.returnUrl);
       }
     },
       (reject) => {
@@ -107,7 +111,8 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.isLogin = !this.isLogin;
           const credentialData = JSON.parse(user)
           this.localSlorageService.setItem('defaultLogedUser', credentialData);
-          this.router.navigate(['/books-management']);
+          // this.router.navigate(['/books-management']);
+          this.router.navigateByUrl(this.returnUrl);
           this.check(credentialData);
         }
       }

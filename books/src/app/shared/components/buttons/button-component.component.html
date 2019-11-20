@@ -1,3 +1,4 @@
-<button class="{{buttonData.class}} button-component" [attr.disabled]="buttonData.disabled ? true : null" mat-button
+<button class="{{buttonData.class}} button-component" 
+    [attr.disabled]="buttonData.disabled ? true : null" mat-button
     type="submit">{{buttonData.title}}
-    <span class="loader" [ngClass]="{'loading': buttonData.loading}"></span> </button>
+    <span class="loader"  [ngClass]="{'loading': buttonData.loading}"></span> </button>

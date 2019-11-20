@@ -9,6 +9,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatSelectModule} from '@angular/material/select';
 import {MatMenuModule} from '@angular/material/menu';
 import { MatSortModule } from '@angular/material/sort';
+import { MatCardModule } from '@angular/material/card';
 @NgModule({
   declarations: [],
   imports: [
@@ -21,6 +22,7 @@ import { MatSortModule } from '@angular/material/sort';
     MatSelectModule,
     MatIconModule,
     MatMenuModule,
+    MatCardModule,
     MatSortModule,
   ],
   exports:[
@@ -29,6 +31,7 @@ import { MatSortModule } from '@angular/material/sort';
     MatCheckboxModule,
     MatButtonModule,
     MatDialogModule,
+    MatCardModule,
     MatTableModule,
     MatIconModule,
     MatSelectModule,

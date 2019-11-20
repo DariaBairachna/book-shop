@@ -16,7 +16,8 @@ const routes: Routes = [
   },
   {
     path: 'author-management',
-    loadChildren: () => import('./author-management/author-management.module').then(m => m.AuthorManagementModule)
+    loadChildren: () => import('./author-management/author-management.module').then(m => m.AuthorManagementModule),
+    canActivate: [LoggedInUserGuard]
   },
 
 ];

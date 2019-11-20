@@ -7,6 +7,7 @@ import { BookModalComponent } from '../book-modal/book-modal.component';
 import { BookService, LocalSlorageService } from 'app/services';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-books',
@@ -19,6 +20,7 @@ export class BooksComponent implements OnInit, OnDestroy {
   public displayedColumns: string[] = ['id', 'title', 'description', 'category', 'author', 'price', 'controls'];
   public dataSource: MatTableDataSource<BookViewModel>;
   public idValue: string;
+  public loading: boolean;
   private destroyed: Subject<boolean> = new Subject();
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
@@ -26,6 +28,7 @@ export class BooksComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private bookService: BookService,
     private localStorageService: LocalSlorageService,
+    
   ) {
     // this.dataSource = new MatTableDataSource(this.bookData);
     // this.dataSource.sort = this.sort;
@@ -36,12 +39,15 @@ export class BooksComponent implements OnInit, OnDestroy {
 
   }
 
+
   public getBooks(): void {
+    this.loading = true
     this.bookService.getBooks().pipe(takeUntil(this.destroyed)).subscribe(
       (response: BookViewModel[]) => {
         this.bookData = response;
         this.dataSource = new MatTableDataSource(this.bookData);
         this.dataSource.sort = this.sort;
+        this.loading = false;
       },
       (error) => {
         let bookArray = this.localStorageService.getItem("books");
@@ -51,6 +57,7 @@ export class BooksComponent implements OnInit, OnDestroy {
         if (!bookArray) {
           this.localStorageService.setItem("books", []);
         }
+        this.loading = false;
       }
     );
   }
@@ -61,7 +68,7 @@ export class BooksComponent implements OnInit, OnDestroy {
 
   public applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
-   }
+  }
 
   public addBook() {
     const dialogRef = this.dialog.open(BookModalComponent, {
@@ -70,14 +77,16 @@ export class BooksComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().pipe(takeUntil(this.destroyed)).subscribe(result => {
+
       if (!result) {
         return
       }
       result.id = this.generateId();
       const { titleModal, ...otherData } = result;
+      console.log("result:" + JSON.stringify(result))
       this.bookService.addBook(otherData).pipe(takeUntil(this.destroyed)).subscribe(
         (response) => {
-          console.log(response);
+
           this.dataSource = new MatTableDataSource(this.bookData);
           this.dataSource.sort = this.sort;
         },
@@ -98,9 +107,11 @@ export class BooksComponent implements OnInit, OnDestroy {
       (response) => {
         if (response) {
           let books = this.bookData.filter((item: BookViewModel) => {
+
             return item.id !== id;
           });
           this.bookData = books;
+          this.dataSource = new MatTableDataSource(this.bookData);
         }
       },
       (error) => {
@@ -109,6 +120,7 @@ export class BooksComponent implements OnInit, OnDestroy {
         });
         this.localStorageService.setItem("books", books);
         this.bookData = books;
+        this.dataSource = new MatTableDataSource(this.bookData);
       }
     );
   }
