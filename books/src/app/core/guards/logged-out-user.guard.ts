@@ -19,10 +19,7 @@ export class LoggedOutUserGuard implements CanActivate {
         if (!this.authenticationService.isLogin()) {
             return true;
         }
-
         this.router.navigate(['books-management']);
-
-
         return false;
     }
 }

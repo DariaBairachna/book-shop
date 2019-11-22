@@ -19,19 +19,21 @@ export class AuthentificationService {
   ) {
     this.currentUserSubject = new BehaviorSubject<UserViewModel>(
       this.isLogin()
-    )
+    );
+
+    this.currentUser = this.currentUserSubject.asObservable();
  
   }
 
   public login(loginData: LoginViewModel): Observable<LoginViewModel> {
-    return this.http.post<LoginViewModel>(`${environment.apiUrl}/users/authenticate`, loginData)
+    return this.http.post<LoginViewModel>(`${environment.apiUrl}/auth/login`, loginData)
   }
   public logout(): void {
     this.localSlorageService.removeItem('currentUser');
   }
 
   public signUp(userData: UserViewModel): Observable<UserViewModel> {
-    return this.http.post<UserViewModel>(`${environment.apiUrl}/users/authenticate`, userData)
+    return this.http.post<UserViewModel>(`${environment.apiUrl}/auth/register`, userData)
   }
 
   public forgotPassword(email: string): Observable<string> {
@@ -41,16 +43,23 @@ export class AuthentificationService {
 return this.http.put<string>(`${environment.apiUrl}/users/${id}`, password)
   }
 
+  public get user(): UserViewModel{
+    return this.currentUserSubject.getValue();
+  }
+
+  public set user(data: UserViewModel){
+    this.currentUserSubject.next(data);
+
+  }
+
 
   public isLogin() {
-    if ((this.localSlorageService.getItem('currentUser') || this.localSlorageService.getItem('defaultLogedUser')) !== null) {
-
-      this.loggedUser = JSON.parse(this.localSlorageService.getItem('currentUser')) || JSON.parse(this.localSlorageService.getItem('defaultLogedUser'));
- 
-      return this.loggedUser;
+    const currentUser = this.localSlorageService.getItem('currentUser');
+    const defaultUser =  this.localSlorageService.getItem('defaultUser');
+    if(!currentUser && !defaultUser){
+      return null;
     }
-
-    return this.loggedUser = null;
+    return JSON.parse(defaultUser);
 
   }
 

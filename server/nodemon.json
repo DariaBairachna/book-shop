@@ -1,0 +1,7 @@
+{
+    "watch": ["src"],
+    "ext": "ts",
+    "ignore": ["src/**/*.spec.ts"],
+    "exec": "tts-node ./src/server.ts",
+    "inspect": "0.0.0.0:9229"
+  }

@@ -83,7 +83,7 @@ export class BooksComponent implements OnInit, OnDestroy {
       }
       result.id = this.generateId();
       const { titleModal, ...otherData } = result;
-      console.log("result:" + JSON.stringify(result))
+
       this.bookService.addBook(otherData).pipe(takeUntil(this.destroyed)).subscribe(
         (response) => {
 

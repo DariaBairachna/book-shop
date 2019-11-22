@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/books-management';
     const savedUser = this.localSlorageService.getItem('savedUser');
     if (savedUser) {
       let savedUserValue: LoginViewModel = JSON.parse(savedUser);
@@ -90,7 +90,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.router.navigate(['/books-management']);
     }
     this.authService.login(this.loginForm.value).pipe(takeUntil(this.destroyed)).subscribe((response: LoginViewModel) => {
-      
+
       if (response) {
         this.isLogin = !this.isLogin;
         this.localSlorageService.setItem('currentUser', response);
@@ -107,12 +107,12 @@ export class LoginComponent implements OnInit, OnDestroy {
           email: this.loginForm.value.email,
           password: this.loginForm.value.password
         }
+        debugger;
         if (user == JSON.stringify(loginData)) {
           this.isLogin = !this.isLogin;
           const credentialData = JSON.parse(user)
           this.localSlorageService.setItem('defaultLogedUser', credentialData);
-          // this.router.navigate(['/books-management']);
-          this.router.navigateByUrl(this.returnUrl);
+          this.router.navigate([this.returnUrl]);
           this.check(credentialData);
         }
       }

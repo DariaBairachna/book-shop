@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AlertComponent } from 'app/shared/components/alert/alert.component';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { UserViewModel, LoginViewModel, ButtonViewModel } from 'app/shared/models';
+import { LoginViewModel, ButtonViewModel } from 'app/shared/models';
 @Component({
   selector: 'app-reset-password',
   templateUrl: './reset-password.component.html',
