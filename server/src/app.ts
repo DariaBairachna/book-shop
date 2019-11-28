@@ -2,7 +2,7 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 import { Routes } from "./routes/routes";
 import * as cors from "cors";
-import { ErrorMiddleware } from "middlewares/error.middleware.ts";
+import { ErrorMiddleware } from "./middlewares/error.middleware.ts";
 
 class App {
   public app: express.Application;

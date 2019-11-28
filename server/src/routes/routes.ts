@@ -1,6 +1,10 @@
 import { Request, Response, Application } from "express";
-import { diContainer } from "di-container";
-import { Controller, ErrorHandler } from "common";
+
+import { Controller, ErrorHandler } from "../common";
+
+import { diContainer } from "../di-container";
+
+
 
 export class Routes {
   routes(app: Application): void {

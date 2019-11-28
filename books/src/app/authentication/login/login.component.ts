@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   ) {
     this.loginForm = this.formBuilder.group({
       email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [Validators.required, ValidationService]),
+      password: new FormControl('', [Validators.required, ValidationService.validationPassword]),
       rememberCheckbox: new FormControl('', []),
     });
 
@@ -107,12 +107,12 @@ export class LoginComponent implements OnInit, OnDestroy {
           email: this.loginForm.value.email,
           password: this.loginForm.value.password
         }
-        debugger;
         if (user == JSON.stringify(loginData)) {
           this.isLogin = !this.isLogin;
           const credentialData = JSON.parse(user)
           this.localSlorageService.setItem('defaultLogedUser', credentialData);
-          this.router.navigate([this.returnUrl]);
+          debugger
+          this.router.navigateByUrl(this.returnUrl);
           this.check(credentialData);
         }
       }

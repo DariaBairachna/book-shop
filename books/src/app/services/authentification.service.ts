@@ -29,7 +29,11 @@ export class AuthentificationService {
     return this.http.post<LoginViewModel>(`${environment.apiUrl}/auth/login`, loginData)
   }
   public logout(): void {
-    this.localSlorageService.removeItem('currentUser');
+    this.currentUserSubject = new BehaviorSubject<UserViewModel>(
+      this.isLogin()
+    );
+    this.localSlorageService.removeItem('defaultLogedUser');
+
   }
 
   public signUp(userData: UserViewModel): Observable<UserViewModel> {
@@ -56,8 +60,9 @@ return this.http.put<string>(`${environment.apiUrl}/users/${id}`, password)
   public isLogin() {
     const currentUser = this.localSlorageService.getItem('currentUser');
     const defaultUser =  this.localSlorageService.getItem('defaultUser');
-    if(!currentUser && !defaultUser){
-      return null;
+    const defaultLoggetUser =  this.localSlorageService.getItem('defaultLoggedUser');
+    if(!currentUser && !defaultLoggetUser){
+      return false;
     }
     return JSON.parse(defaultUser);
 

@@ -13,8 +13,8 @@ import {
   ResponseBase,
   RequestGet,
   RouteHandler
-} from "common";
-import { AuthMiddleware } from "middlewares/auth.middleware";
+} from "../common";
+import { AuthMiddleware } from "../middlewares/auth.middleware";
 
 @injectable()
 export class AuthController implements Controller {
@@ -27,16 +27,6 @@ export class AuthController implements Controller {
     this.profile = this.profile.bind(this);
   }
 
-  // async register(
-  //   request: RequestPost<AuthRegisterModel>,
-  //   response: ResponseBase<AuthResponseModel>
-  // ) {
-   
-  //   const user = await this._authService.register({ ...request.body });
-  //   const authContext = this._jwtHelper.authenticate(user);
-  //   return response.send(authContext);
-  // }
-
   async register(
     request: RequestPost<AuthRegisterModel>,
     response: ResponseBase<AuthResponseModel>
@@ -46,9 +36,6 @@ export class AuthController implements Controller {
     const authContext = this._jwtHelper.authenticate(user);
     return response.send(authContext);
   }
-
-
-
 
   async login(
     request: RequestPost<AuthLoginModel>,

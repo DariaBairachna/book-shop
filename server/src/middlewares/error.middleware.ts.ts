@@ -1,5 +1,5 @@
 import { Response, NextFunction, Request } from "express";
-import { ApplicationError } from "common";
+import { ApplicationError } from "../common";
 import { ErrorRequestHandler } from "express-serve-static-core";
 export const ErrorMiddleware: ErrorRequestHandler = async (
   err: any,

@@ -1,4 +1,4 @@
-import { Environments } from "environment/environment";
+import { Environments } from "./../environment/environment";
 import { AuthUserModel, AuthContextModel, AuthResponseModel } from "models";
 import * as jsonwebtoken from "jsonwebtoken";
 import { injectable } from "inversify";

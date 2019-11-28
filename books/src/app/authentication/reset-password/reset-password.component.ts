@@ -16,7 +16,6 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
   public resetPasswordForm: FormGroup;
   public resetButtonData: ButtonViewModel = new ButtonViewModel();;
   private destroyed: Subject<boolean> = new Subject<boolean>();
-
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthentificationService,
@@ -24,9 +23,12 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
   ) {
     this.resetPasswordForm = this.formBuilder.group({
-      password: new FormControl('', [Validators.required, ValidationService]),
-      confirmPassword: new FormControl('', [Validators.required, ValidationService])
-    });
+      password: new FormControl('', [Validators.required, ValidationService.validationPassword]),
+      confirmPassword: new FormControl('', [Validators.required, ValidationService.validationPassword])
+    },
+      {
+        validator: ValidationService.comparePassword
+      });
     this.resetButtonData = {
       title: "Reset password",
       class: "orange-btn",
@@ -34,13 +36,16 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
       disabled: true,
     };
     this.resetPasswordForm.valueChanges.pipe(takeUntil(this.destroyed)).subscribe(data => {
+      console.log(this.resetPasswordForm)
       if (!this.resetPasswordForm.invalid) {
         this.resetButtonData.disabled = false;
       }
+      this.resetButtonData.disabled = true;
     });
   }
 
   ngOnInit() {
+
   }
 
   public openDialog(content: string): void {
@@ -61,7 +66,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
     if (this.resetPasswordForm.invalid) {
       this.resetButtonData.loading = false;
       return false;
-    } 
+    }
     if (this.resetPasswordForm.get('password').value === this.resetPasswordForm.get('confirmPassword').value) {
       let user: LoginViewModel = JSON.parse(this.localSlorageService.getItem('defaultUser'));
       let password = this.resetPasswordForm.get('password').value;
@@ -82,7 +87,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
           this.openDialog('Password change');
         });
 
-    } 
+    }
     this.openDialog('Passwords are not equal');
     return false;
 

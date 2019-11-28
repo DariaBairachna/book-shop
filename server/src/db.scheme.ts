@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes } from "sequelize";
-import { UserModel} from "./repositories";
+import { UserModel, BookModel, AuthorModel, BookInAuthorModel } from "./repositories";
 
 export const sequelize = new Sequelize("books", "root", "MySQL123dasha", {
   dialect: "mysql",
@@ -22,30 +22,60 @@ UserModel.init({
   modelName: "user"
 });
 
+AuthorModel.init({
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+    allowNull: false
+  },
+  name: DataTypes.STRING,
+}, {
+  sequelize,
+  modelName: "authors"
+});
 
-// BookModel.init({
-//   id: {
-//     type: DataTypes.INTEGER,
-//     autoIncrement: true,
-//     primaryKey: true,
-//     allowNull: false
-//   },
-//   cover: DataTypes.STRING,
-//   title: DataTypes.STRING,
-//   description: DataTypes.STRING,
-//   category: DataTypes.STRING,
-//   author: DataTypes.STRING,
-//   price: DataTypes.STRING,
-//   currency: DataTypes.STRING,
-// }, {
-//   sequelize,
-//   modelName: "book"
-// });
+BookModel.init({
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+    allowNull: false
+  },
+  cover: DataTypes.STRING,
+  title: DataTypes.STRING,
+  description: DataTypes.STRING,
+  category: DataTypes.STRING,
+  price: DataTypes.STRING,
+  currency: DataTypes.STRING,
+}, {
+  sequelize,
+  modelName: "book"
+});
+
+BookInAuthorModel.init({
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+    allowNull: false
+  },
+}, {
+  sequelize,
+  modelName: "book-in-author"
+});
+
+BookModel.belongsToMany(AuthorModel, {through: BookInAuthorModel});
+AuthorModel.belongsToMany(BookModel, {through: BookInAuthorModel});
+  
 
 
+sequelize.sync().then(result => {
+  // console.log(result);
+}).catch(err => console.log(err));
 
-
-sequelize.sync().then(result=>{
-  console.log(result);
-})
-.catch(err=> console.log(err));
+exports.models = {
+  BookModel,
+  AuthorModel,
+  BookInAuthorModel
+}

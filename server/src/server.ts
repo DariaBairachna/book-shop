@@ -1,12 +1,12 @@
 import "reflect-metadata";
-import "di-container";
+import "./di-container";
 import app from "./app";
 import * as https from "https";
 import * as http from "http";
 import * as fs from "fs";
-const httpsPort = 443;
-const httpPort = 80;
-import { sequelize } from "db.scheme";
+const httpsPort = 3000;
+const httpPort = 8000;
+import { sequelize } from "./db.scheme";
 
 (async () => {
   try {

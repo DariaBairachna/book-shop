@@ -25,7 +25,7 @@ export class SingUpComponent implements OnInit, OnDestroy {
  
     this.signUpForm = this.formBuilder.group({
       email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [Validators.required, ValidationService]),
+      password: new FormControl('', [Validators.required, ValidationService.validationPassword]),
       firstName: new FormControl('', [Validators.required, Validators.minLength(3)]),
       lastName: new FormControl('', [Validators.required, Validators.minLength(3)])
     });

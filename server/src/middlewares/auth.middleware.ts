@@ -1,6 +1,6 @@
 import { Response, NextFunction, Request } from "express";
-import { diContainer } from "di-container";
-import { JwtHelper, RequestBase } from "common";
+import { JwtHelper, RequestBase } from "../common";
+import { diContainer } from "../di-container";
 
 export const AuthMiddleware = async (
   req: Request,

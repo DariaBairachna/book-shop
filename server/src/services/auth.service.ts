@@ -1,8 +1,8 @@
 import { AuthRegisterModel, AuthUserModel, AuthLoginModel } from "../models";
 import { UserRepository } from "../repositories";
 import { inject, injectable } from "inversify";
-import { ApplicationError } from "common";
-import { HashEncrypter } from "common/hash-encrypter";
+import { ApplicationError, HashEncrypter } from "./../common";
+
 @injectable()
 export class AuthService {
   constructor(

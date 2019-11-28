@@ -15,7 +15,7 @@ export interface Controller {
   routes(): RouteHandler[];
 }
 
-export type RouteType = "GET" | "POST";
+export type RouteType = "GET" | "POST" | "PUT" | "DELETE";
 
 export interface RequestGet<Params> {
   params: Params;
