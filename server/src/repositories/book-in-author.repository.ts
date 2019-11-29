@@ -1,7 +1,7 @@
-import { BookInAuthorEntity, BookEntity, AuthorEntity } from "../entities";
+import { BookInAuthorEntity } from "../entities";
 import { Model } from "sequelize";
 import { injectable, id } from "inversify";
-import { BookInAuthorDataModel } from "models";
+import { BookInAuthorDataModel, BookInAuthorFullModel } from "models";
 import { BookModel } from "../repositories";
 import { AuthorModel } from "./author.repository";
 export interface BookInAuthorSequelizeScheme extends BookInAuthorEntity, Model<BookInAuthorEntity> { }
@@ -22,9 +22,10 @@ export class BookInAuthorRepository {
     }
 
     async findOneAuthor(authorId: number): Promise<AuthorModel> {
+        console.log(authorId)
         const result = await AuthorModel.findOne({
             where: {
-               id: authorId,
+                id: authorId,
             }
         });
         return result;
@@ -36,6 +37,33 @@ export class BookInAuthorRepository {
             }
         });
         return result;
+    }
+
+    async findOne(id: number, bookId: boolean): Promise<BookInAuthorFullModel> {
+        let result: BookInAuthorFullModel;
+        if (bookId) {
+           BookModel.findOne({
+                where: {
+                    id: id,
+                }
+            }).then((book)=>{
+                book.getAuthors().then((authors)=>{
+                    result.author = authors;
+                })
+            });
+        };
+        if (!bookId) {
+            AuthorModel.findOne({
+                where: {
+                    authorId: id,
+                }
+            }).then((author)=>{
+                author.getBooks().then((books)=>{
+                    result.book = books
+                })
+            });
+        }
+        return result ;
     }
 
     async update(bookId: number, data: BookInAuthorDataModel): Promise<boolean> {

@@ -4,21 +4,23 @@ import {
     Controller,
     RequestPost,
     ResponseBase,
-    RouteHandler
+    RouteHandler,
+    RequestGet
 } from "../common";
 import { BookInAuthorService } from "../services";
 import { BookInAuthorDataModel } from "models";
-import { BookInAuthorModel,} from "repositories";
+import { BookInAuthorModel, AuthorModel, BookModel } from "../repositories";
 
 
 @injectable()
 export class BookInAuthorController implements Controller {
     @inject(BookInAuthorService) private _bookInAuthorService: BookInAuthorService;
-   
+
 
     constructor() {
         this.addBookInAuthor = this.addBookInAuthor.bind(this);
-        // this.getBookInAuthor = this.getBookInAuthor.bind(this);
+        this.getAuthorInBook = this.getAuthorInBook.bind(this);
+        this.getBookInAuthor = this.getBookInAuthor.bind(this);
         this.updateBookInAuthor = this.updateBookInAuthor.bind(this);
         this.deleteBookInAuthor = this.deleteBookInAuthor.bind(this);
     }
@@ -28,27 +30,39 @@ export class BookInAuthorController implements Controller {
         request: RequestPost<BookInAuthorModel>,
         response: ResponseBase<BookInAuthorDataModel>
     ) {
-        this._bookInAuthorService.getBookInAuthor({ ...request.body }).then((response) => {
-            if (!response) {
-                return;
-            }
-
-          response.addBookModel(response.book)
+        this._bookInAuthorService.add(request.body.bookId, request.body.authorId);
+               
+        return response.send(request.body);
+    }
+    async getBookInAuthor(
+        request: RequestGet<{ id: number }>,
+        response: ResponseBase<string>
+    ) {
+        this._bookInAuthorService.getAuthor(
+            request.query.id,
+        ).then((author) => {
+            author.getBooks().then((books) => {
+                return books;
+            })
         });
-        console.log({ ...request.body })
 
-        return response.send({ ...request.body });
+        return response.send("Success");
     }
 
-    // async getBookInAuthor(
-    //     request: RequestPost<BookInAuthorDataModel>,
-    //     response: ResponseBase<BookInAuthorDataModel>
-    // ) {
-    //     const author = await this._bookInAuthorService.getBookInAuthor(
-    //         request.body.authorId,
-    //     );
-    //     return response.send(author);
-    // }
+    async getAuthorInBook(
+        request: RequestGet<{ id: number }>,
+        response: ResponseBase<string>
+    ) {
+        this._bookInAuthorService.getBook(
+            request.query.id
+        ).then((book) => {
+            book.getAuthors().then((authors) => {
+                return authors;
+            })
+        });
+
+        return response.send("Success");
+    }
 
     async updateBookInAuthor(
         request: RequestPost<BookInAuthorModel>,
@@ -80,11 +94,16 @@ export class BookInAuthorController implements Controller {
             handlers: [<any>this.addBookInAuthor],
             type: "POST"
         });
-        // handlers.push({
-        //     route: `/${prefix}/get-book-in-author`,
-        //     handlers: [<any>this.getBookInAuthor],
-        //     type: "GET"
-        // });
+        handlers.push({
+            route: `/${prefix}/get-book-in-author`,
+            handlers: [<any>this.getBookInAuthor],
+            type: "GET"
+        });
+        handlers.push({
+            route: `/${prefix}/get-author-in-book`,
+            handlers: [<any>this.getAuthorInBook],
+            type: "GET"
+        });
         handlers.push({
             route: `/${prefix}/update-book-in-author`,
             handlers: [<any>this.updateBookInAuthor],

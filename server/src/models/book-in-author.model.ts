@@ -1,13 +1,14 @@
 
-import {  BookModel, AuthorModel, BookInAuthorSequelizeScheme, BookSequelizeScheme, AuthorSequelizeScheme } from "repositories";
+import {  BookModel, AuthorModel } from "repositories";
 import { Model } from "sequelize/types";
+import { BookEntity } from "entities";
 
 export interface BookInAuthorDataModel {
-    authorId: number;
+     authorId: number;
     bookId: number;
 }
 
 export interface BookInAuthorFullModel {
-    book: BookSequelizeScheme;
-    author: AuthorSequelizeScheme;
+    book: BookModel;
+    author: AuthorModel;
 }

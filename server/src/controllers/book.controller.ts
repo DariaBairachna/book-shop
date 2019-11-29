@@ -28,7 +28,6 @@ export class BookController implements Controller {
         response: ResponseBase<BookDataModel>
     ) {
         const book = await this._bookService.addBook({ ...request.body });
-        console.log(book)
         return response.send(book);
     }
 

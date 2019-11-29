@@ -19,6 +19,7 @@ export type RouteType = "GET" | "POST" | "PUT" | "DELETE";
 
 export interface RequestGet<Params> {
   params: Params;
+  query: Params;
   user: AuthContextModel;
 }
 

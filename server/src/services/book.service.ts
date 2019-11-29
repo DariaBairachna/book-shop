@@ -8,7 +8,7 @@ export class BookService {
         @inject(BookRepository) private _bookRepository: BookRepository) { }
 
     async addBook(bookModel: BookDataModel): Promise<BookDataModel> {
-        const existedBook = await this._bookRepository.findOne(
+        const existedBook = await this._bookRepository.findOneByTitle(
             bookModel.title,
 
         );
@@ -31,7 +31,7 @@ export class BookService {
 
 
     async get(title: string): Promise<BookDataModel> {
-        const value = await this._bookRepository.findOne(title);
+        const value = await this._bookRepository.findOneByTitle(title);
         return {
             cover: value.cover,
             title: value.title,

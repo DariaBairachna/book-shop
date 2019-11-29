@@ -4,9 +4,12 @@ import { injectable, id } from "inversify";
 
 export interface AuthorSequelizeScheme extends AuthorEntity, Model<AuthorEntity> { }
 
-export class AuthorModel extends Model implements AuthorEntity {
+export class AuthorModel extends Model implements AuthorEntity  {
+ 
     id: number;
     name: string;
+    addBook: Function;
+    getBooks: Function;
 }
 
 @injectable()

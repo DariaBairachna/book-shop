@@ -13,6 +13,7 @@ export class BookModel extends Model implements BookEntity {
     category: string;
     price: number;
     currency: string;
+    getAuthors: Function;
 }
 
 @injectable()
@@ -30,13 +31,19 @@ export class BookRepository {
         return books;
     }
 
-    async findOne(title: string): Promise<BookEntity> {
-        const books = await BookModel.findAll();
-        const result = await BookModel.findOne({
+    async findOneByTitle(title: string): Promise<BookEntity> {
+          const result = await BookModel.findOne({
             where: { title: title }
         });
         return result;
     }
+
+    async findOneById(id: number): Promise<BookEntity> {
+        const result = await BookModel.findOne({
+          where: { id: id }
+      });
+      return result;
+  }
 
     async update(idBook: number, data: BookDataModel): Promise<boolean> {
         const result = await BookModel.update({ data: data }, {
