@@ -2,6 +2,7 @@ import { UserEntity, BookEntity } from "../entities";
 import { Model } from "sequelize";
 import { injectable, id } from "inversify";
 import { BookDataModel } from "models";
+import { AuthorModel } from ".";
 
 export interface BookSequelizeScheme extends BookEntity, Model<BookEntity> { }
 
@@ -14,6 +15,8 @@ export class BookModel extends Model implements BookEntity {
     price: number;
     currency: string;
     getAuthors: Function;
+    addAuthor: Function;
+    setAuthors: Function;
 }
 
 @injectable()
@@ -22,37 +25,54 @@ export class BookRepository {
 
     async add(entity: BookEntity): Promise<BookEntity> {
         let newValue = await BookModel.create(entity);
-        console.log(entity)
         return newValue;
     }
 
-    async findAll(): Promise<BookEntity[]>{
-        const books = await BookModel.findAll();
+    async findAll(): Promise<BookEntity[]> {
+        const books = await BookModel.findAll(
+            {
+                include: [{
+                    attributes: ['name'],
+                    model: AuthorModel,
+                }],
+            }
+        );
         return books;
     }
 
     async findOneByTitle(title: string): Promise<BookEntity> {
-          const result = await BookModel.findOne({
-            where: { title: title }
+        const result = await BookModel.findOne({
+            where: { title: title },
+            include: [{
+                attributes: ['name'],
+                model: AuthorModel,
+            }]
         });
+
         return result;
     }
 
     async findOneById(id: number): Promise<BookEntity> {
+
         const result = await BookModel.findOne({
-          where: { id: id }
-      });
-      return result;
-  }
+            where: { id: id },
+            include: [
+                {
+                    attributes: ['name'],
+                    model: AuthorModel,
 
-    async update(idBook: number, data: BookDataModel): Promise<boolean> {
-        const result = await BookModel.update({ data: data }, {
-            where: { id: idBook },
+                },
+            ]
+        });
 
+        return result;
+    }
+
+    async update(bookId: number, book: BookDataModel): Promise<BookDataModel> {
+        const result = await BookModel.update(book, {
+            where: { id: bookId },
         })
-
-       return true
-
+        return book
     }
 
     async delete(idBook: number): Promise<void> {

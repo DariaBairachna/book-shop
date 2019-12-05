@@ -26,12 +26,21 @@ export class AuthorRepository {
         return authors;
     }
 
-    async findOne(name: string): Promise<AuthorEntity> {
+    async findOneByName(name: string): Promise<AuthorEntity> {
         const result = await AuthorModel.findOne({
             where: { name: name }
         });
         return result;
     }
+
+
+    async findOneById(id: number): Promise<AuthorEntity> {
+        const result = await AuthorModel.findOne({
+            where: { id: id }
+        });
+        return result;
+    }
+
 
     async update(authorId: number, name: string): Promise<boolean> {
         const result = await AuthorModel.update({ name: name }, {

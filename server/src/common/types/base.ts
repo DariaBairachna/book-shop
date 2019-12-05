@@ -9,6 +9,7 @@ export interface RouteHandler {
   handlers: express.RequestHandler[];
   route: string;
   type: RouteType;
+ 
 }
 
 export interface Controller {
@@ -25,6 +26,18 @@ export interface RequestGet<Params> {
 
 export interface RequestPost<BodyType> {
   body: BodyType;
+  user: AuthContextModel;
+}
+
+export interface RequestDelete<Params>{
+  query: Params;
+  path: Params;
+}
+export interface RequestPut<Params>{
+  params: Params;
+  path: Params;
+  query: Params;
+  body: Params;
   user: AuthContextModel;
 }
 

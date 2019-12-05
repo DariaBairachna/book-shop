@@ -1,5 +1,6 @@
 import { Sequelize, DataTypes } from "sequelize";
-import { UserModel, BookModel, AuthorModel, BookInAuthorModel } from "./repositories";
+import { UserModel, BookModel, AuthorModel } from "./repositories";
+import { BookInAuthorModel } from "./models";
 
 export const sequelize = new Sequelize("books", "root", "MySQL123dasha", {
   dialect: "mysql",
@@ -19,7 +20,7 @@ UserModel.init({
   password: DataTypes.STRING
 }, {
   sequelize,
-  modelName: "user"
+  modelName: "users"
 });
 
 AuthorModel.init({
@@ -50,7 +51,7 @@ BookModel.init({
   currency: DataTypes.STRING,
 }, {
   sequelize,
-  modelName: "book"
+  modelName: "books"
 });
 
 BookInAuthorModel.init({
@@ -71,7 +72,7 @@ AuthorModel.belongsToMany(BookModel, {through: BookInAuthorModel});
 
 
 sequelize.sync().then(result => {
-  // console.log(result);
+
 }).catch(err => console.log(err));
 
 exports.models = {

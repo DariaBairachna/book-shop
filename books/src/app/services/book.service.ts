@@ -14,7 +14,7 @@ export class BookService {
     ) { }
 
   public getBooks(): Observable<BookViewModel[]> {
-    return this.http.get<BookViewModel[]>(`${environment.apiUrl}/books`)
+    return this.http.get<BookViewModel[]>(`${environment.apiUrl}/book/get-books`)
   }
   public getBook(id: string): Observable<BookViewModel> {
     return this.http.get<BookViewModel>(`${environment.apiUrl}/books/${id}`)

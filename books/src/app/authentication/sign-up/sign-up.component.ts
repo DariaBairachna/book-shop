@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
-import { UserViewModel, ButtonViewModel } from 'app/shared/models';
+import { UserViewModel, ButtonViewModel, AuthResponseModel } from 'app/shared/models';
 import { ValidationService, LocalSlorageService, AuthentificationService } from 'app/services';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -14,13 +14,16 @@ import { Subject } from 'rxjs';
 })
 export class SingUpComponent implements OnInit, OnDestroy {
   public signUpForm: FormGroup;
+  public isLogin: boolean = false;
   private destroyed: Subject<boolean> = new Subject<boolean>();
   public signUpButtonData: ButtonViewModel = new ButtonViewModel;
+  public returnUrl: string;
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthentificationService,
     private localSlorageService: LocalSlorageService,
     private router: Router,
+    private route: ActivatedRoute,
   ) {
  
     this.signUpForm = this.formBuilder.group({
@@ -43,6 +46,7 @@ export class SingUpComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/books-management';
   }
 
   public onSubmit() { 
@@ -50,24 +54,16 @@ export class SingUpComponent implements OnInit, OnDestroy {
     if (this.signUpForm.invalid) {
       this.signUpButtonData.loading = false;
       return false;
- 
     }
-
-    this.authService.signUp(this.signUpForm.value).pipe(takeUntil(this.destroyed)).subscribe((response: UserViewModel) => {
-      this.router.navigate(['/login']);
-      this.localSlorageService.setItem('defaultUser', { email: "a@dd.ddd", password: "d@1Effffff" });
+    this.authService.signUp(this.signUpForm.value).pipe(takeUntil(this.destroyed)).subscribe((response: AuthResponseModel) => {
+      this.router.navigate([this.returnUrl]);
       this.signUpButtonData.loading = false;
       this.signUpButtonData.disabled = true;
-      return response;
-    },
-    (error) =>{
-      this.router.navigate(['/login']);
-      this.localSlorageService.setItem('defaultUser', { email: "a@dd.ddd", password: "d@1Effffff" });
-    }
+      this.localSlorageService.setItem("token", {token: response.token, expiresIn: response.expiresIn, })
     
-    )
-   
-   
+      
+      return response;
+    })
   }
 
   ngOnDestroy(): void {

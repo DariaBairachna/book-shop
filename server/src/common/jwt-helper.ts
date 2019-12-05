@@ -11,7 +11,7 @@ export class JwtHelper {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
-      password: user.password
+      password: user.password,
     };
     const token = jsonwebtoken.sign(authContext, Environments.secret, {
       expiresIn: Environments.tokenExpiresIn
@@ -19,7 +19,8 @@ export class JwtHelper {
     return {
       token: token,
       user: authContext,
-      expiresIn: Environments.tokenExpiresIn
+      expiresIn: Environments.tokenExpiresIn,
+      role: authContext.role
     };
   }
 

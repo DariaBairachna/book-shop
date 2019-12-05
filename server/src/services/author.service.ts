@@ -7,8 +7,8 @@ export class AuthorService {
     constructor(
         @inject(AuthorRepository) private _authorRepository: AuthorRepository) { }
 
-    async addAuthor(authorModel: AuthorDataModel): Promise<AuthorDataModel> {
-        const existedAuthor = await this._authorRepository.findOne(
+    async add(authorModel: AuthorDataModel): Promise<AuthorDataModel> {
+        const existedAuthor = await this._authorRepository.findOneByName(
             authorModel.name,
 
         );
@@ -22,10 +22,16 @@ export class AuthorService {
         return authorEntity;
     }
 
+    async getById(id: number): Promise<AuthorDataModel> {
+        const value = await this._authorRepository.findOneById(id);
+        return {
+            name: value.name,
+        };
+    }
 
 
-    async get(name: string): Promise<AuthorDataModel> {
-        const value = await this._authorRepository.findOne(name);
+    async getByName(name: string): Promise<AuthorDataModel> {
+        const value = await this._authorRepository.findOneByName(name);
         return {
             name: value.name,
         };

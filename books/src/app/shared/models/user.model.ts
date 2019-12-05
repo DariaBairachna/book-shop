@@ -4,5 +4,5 @@ export class UserViewModel{
     lastName: string;
     email: string;
     password: string;
-    tokeb: string;
+    token: string;
 }

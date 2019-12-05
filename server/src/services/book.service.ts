@@ -1,13 +1,15 @@
-import { BookDataModel} from "../models";
-import { BookRepository, BookModel } from "../repositories";
+import { BookDataModel, BookInAuthorModel } from "../models";
+import { BookRepository, BookModel, AuthorRepository } from "../repositories";
 import { inject, injectable } from "inversify";
 import { ApplicationError } from "../common";
+import { BookEntity, AuthorEntity } from "entities";
 @injectable()
 export class BookService {
     constructor(
-        @inject(BookRepository) private _bookRepository: BookRepository) { }
+        @inject(BookRepository) private _bookRepository: BookRepository,
+        @inject(AuthorRepository) private _authorRepository: AuthorRepository) { }
 
-    async addBook(bookModel: BookDataModel): Promise<BookDataModel> {
+    async addBook(bookModel: BookDataModel): Promise<BookEntity> {
         const existedBook = await this._bookRepository.findOneByTitle(
             bookModel.title,
 
@@ -23,35 +25,78 @@ export class BookService {
             category: bookModel.category,
             price: bookModel.price,
             currency: bookModel.currency,
-            
+
         });
         return bookEntity;
     }
 
-
-
-    async get(title: string): Promise<BookDataModel> {
-        const value = await this._bookRepository.findOneByTitle(title);
-        return {
-            cover: value.cover,
-            title: value.title,
-            description: value.description,
-            category: value.category,
-            price: value.price,
-            currency: value.currency,
-           
-        };
+    async addAuthorInBook(bookId: number, authorsId: Array<number>): Promise<void> {
+        authorsId.forEach((authorId) => {
+            return this._authorRepository.findOneById(authorId).then((author: AuthorEntity) => {
+                if (!author) {
+                    return;
+                };
+                this.getBookById(bookId).then((book: BookModel) => {
+                    if (!book) {
+                        return;
+                    };
+                    return book.addAuthor(author, { through: BookInAuthorModel })
+                })
+            })
+        });
     }
 
-    async update(id: number, data: BookDataModel): Promise<boolean> {
-        const value = await this._bookRepository.update(id, data);
+
+    async getBooks(): Promise<BookEntity[]> {
+        const books = await this._bookRepository.findAll();
+        return books
+    }
+
+    async getBookById(id: number): Promise<BookEntity> {
+        const value = await this._bookRepository.findOneById(id);
+        return value;
+    }
+
+    async getBookByTitle(title: string): Promise<BookEntity> {
+        const value = await this._bookRepository.findOneByTitle(title);
+
+        return value;
+
+    }
+
+    async update(id: number, book: BookDataModel): Promise<BookDataModel> {
+        const value = await this._bookRepository.update(id, book)
+
+        return value;
+    }
+    
+    async updateAuthor(id: number, authorsId: Array<number>): Promise<boolean> {
+        let authors: Array<any> = [];
+        authorsId.map((authorId) => {
+           let test = this._authorRepository.findOneById(authorId).then((author: AuthorEntity) => {
+                if (!author) {
+                    return;
+                };
+               authors.push(author);
+                return author
+
+            });
+        });
+        this.getBookById(id).then((book: BookModel) => {
+            if (!book) {
+                return;
+            };
+            book.setAuthors(authors, { through: BookInAuthorModel }); 
+            return book
+        });
         return true;
+
     }
 
     async delete(id: number): Promise<boolean> {
         const value = await this._bookRepository.delete(id);
         return true;
     }
-    
+
 
 }

@@ -6,4 +6,5 @@ export class BookEntity {
     category: string;
     price: number;
     currency: string;
+    
 }

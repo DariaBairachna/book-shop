@@ -16,9 +16,16 @@ export class Routes {
     });
     for (const controller of controllers) {
       const routes = controller.routes();
+    
       for (const route of routes) {
         if (route.type === "GET") {
           app.route(route.route).get(ErrorHandler(route.handlers));
+        }
+        if (route.type === "PUT") {
+          app.route(route.route).put(ErrorHandler(route.handlers));
+        }
+        if (route.type === "DELETE") {
+          app.route(route.route).delete(ErrorHandler(route.handlers));
         }
         if (route.type === "POST") {
           app.route(route.route).post(ErrorHandler(route.handlers));

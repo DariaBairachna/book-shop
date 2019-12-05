@@ -4,4 +4,5 @@ export interface AuthResponseModel {
   token: string;
   expiresIn: number;
   user: AuthContextModel;
+  role?: string;
 }

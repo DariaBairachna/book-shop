@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { LoginViewModel, ButtonViewModel } from 'app/shared/models';
+import { LoginViewModel, ButtonViewModel, AuthResponseModel } from 'app/shared/models';
 import { AuthentificationService, LocalSlorageService, ValidationService } from 'app/services';
 import { Router, ActivatedRoute } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
@@ -51,15 +51,15 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/books-management';
-    const savedUser = this.localSlorageService.getItem('savedUser');
+    const savedUser = this.localSlorageService.getItem('token');
     if (savedUser) {
-      let savedUserValue: LoginViewModel = JSON.parse(savedUser);
-      let { email, password } = savedUserValue;
-      this.loginForm.setValue({
-        email,
-        password,
-        rememberCheckbox: true,
-      })
+      // let savedUserValue: string = JSON.parse(savedUser);
+      // let { email, password } = savedUserValue;
+      // this.loginForm.setValue({
+      //   email,
+      //   password,
+      //   rememberCheckbox: true,
+      // })
     }
   }
 
@@ -84,46 +84,24 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (this.loginForm.invalid) {
       this.openDialog();
       return false;
-
     }
     if (this.isLogin) {
       this.router.navigate(['/books-management']);
     }
-    this.authService.login(this.loginForm.value).pipe(takeUntil(this.destroyed)).subscribe((response: LoginViewModel) => {
-
-      if (response) {
-        this.isLogin = !this.isLogin;
-        this.localSlorageService.setItem('currentUser', response);
-        this.check(response);
-        this.router.navigateByUrl(this.returnUrl);
-      }
-    },
-      (reject) => {
-        let user = this.localSlorageService.getItem('defaultUser');
-        if (!user) {
-          this.openDialog();
-        }
-        let loginData: LoginViewModel = {
-          email: this.loginForm.value.email,
-          password: this.loginForm.value.password
-        }
-        if (user == JSON.stringify(loginData)) {
-          this.isLogin = !this.isLogin;
-          const credentialData = JSON.parse(user)
-          this.localSlorageService.setItem('defaultLogedUser', credentialData);
-          debugger
-          this.router.navigateByUrl(this.returnUrl);
-          this.check(credentialData);
-        }
-      }
-    );
+    this.authService.login(this.loginForm.value).pipe(takeUntil(this.destroyed)).subscribe((response: AuthResponseModel) => {
+      this.isLogin = this.authService.isLogin();
+      this.localSlorageService.setItem('token', {token: response.token, expiresIn: response.expiresIn, });
+      this.check(response.token);
+      this.router.navigateByUrl(this.returnUrl);
+    });
 
   }
 
-  public check(credential: LoginViewModel) {
+  public check(token: string) {
     if (this.loginForm.get('rememberCheckbox').value) {
-      this.localSlorageService.setItem('savedUser', credential);
-      this.isLogin = true;
+      this.localSlorageService.setItem('savedUser', token);
+      this.isLogin =  this.authService.isLogin();
+
     }
     if (!this.loginForm.get('rememberCheckbox').value) {
       this.localSlorageService.removeItem('savedUser');
