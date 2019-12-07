@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { BookViewModel } from 'app/shared/models';
 import { Observable } from 'rxjs';
 import { environment } from 'environments/environment';
-import { BooksManagementModule } from 'app/books-management/books-management.module';
 
 
 @Injectable()
@@ -16,19 +15,19 @@ export class BookService {
   public getBooks(): Observable<BookViewModel[]> {
     return this.http.get<BookViewModel[]>(`${environment.apiUrl}/book/get-books`)
   }
-  public getBook(id: string): Observable<BookViewModel> {
-    return this.http.get<BookViewModel>(`${environment.apiUrl}/books/${id}`)
+  public getBook(id: number): Observable<BookViewModel> {
+    return this.http.get<BookViewModel>(`${environment.apiUrl}/book/get-book-by-id?${id}`)
   }
   public addBook(book: BookViewModel): Observable<BookViewModel>  {
-    return this.http.post<BookViewModel>(`${environment.apiUrl}/books/${book.id}`, book)
+    return this.http.post<BookViewModel>(`${environment.apiUrl}/book/add-book`, book)
   }
 
-  public updateBook(id: string, data: BookViewModel ): Observable<BookViewModel> {
-    return this.http.put<BookViewModel>(`${environment.apiUrl}/books/${id}`, data)
+  public updateBook(id: number, book: BookViewModel ): Observable<BookViewModel> {
+    return this.http.put<BookViewModel>(`${environment.apiUrl}/book/update-book/${id}`, book)
   }
 
-  public deleteBook(id: string) {
-    return this.http.delete(`${environment.apiUrl}/books/${id}`)
+  public deleteBook(id: number) {
+    return this.http.delete(`${environment.apiUrl}/book/delete-book/${id}`)
   }
 
 }

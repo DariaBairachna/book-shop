@@ -11,8 +11,7 @@ import {
 } from "../common";
 import { BookService } from "../services";
 import { BookDataModel } from "models";
-import { BookModel } from "repositories";
-import { BookEntity } from "entities";
+import { BookEntity, AuthorEntity } from "entities";
 
 
 @injectable()
@@ -35,14 +34,12 @@ export class BookController implements Controller {
 
     async addBook(
         request: RequestPost<BookDataModel>,
-        response: ResponseBase<BookEntity>
+        response: ResponseBase<object>
     ) {
-        
         const book = await this._bookService.addBook({ ...request.body });
-    
-        const author = await this._bookService.addAuthorInBook(book.id, request.body.authorId);
-        
-        return response.send(book);
+        const author = await this._bookService.addAuthorInBook(book.id, request.body.author);
+        console.log(author)
+        return response.send({book: book, author: author});
     }
 
     async getBooks(
@@ -79,26 +76,24 @@ export class BookController implements Controller {
         request: RequestPut<{ id: number, book: BookDataModel }>,
         response: ResponseBase<boolean>
     ) {
-
         const book = await this._bookService.update(
             request.params.id,
             request.body.book
-        );
-
-        const updateAuthor = await this._bookService.updateAuthor(request.params.id, request.body.book.authorId);
-        
+        );  console.log(request.body)
+        const updateAuthor = await this._bookService.updateAuthor(request.params.id, request.body.book.author);console.log( request.params.id,)
+      
         return response.send(true);
     }
 
     async deleteBook(
         request: RequestDelete<{ id: number }>,
-        response: ResponseBase<any>
+        response: ResponseBase<boolean>
     ) {
 
         await this._bookService.delete(
-            request.query.id
+            request.params.id
         );
-        return response.send(response);
+        return response.send(true);
     }
 
     routes(): RouteHandler[] {

@@ -1,7 +1,7 @@
 import { UserEntity, BookEntity } from "../entities";
 import { Model } from "sequelize";
 import { injectable, id } from "inversify";
-import { BookDataModel } from "models";
+import { BookDataModel, BookInAuthorModel } from "../models";
 import { AuthorModel } from ".";
 
 export interface BookSequelizeScheme extends BookEntity, Model<BookEntity> { }
@@ -32,9 +32,10 @@ export class BookRepository {
         const books = await BookModel.findAll(
             {
                 include: [{
-                    attributes: ['name'],
                     model: AuthorModel,
+                    through: {attributes: []}
                 }],
+
             }
         );
         return books;
@@ -44,8 +45,10 @@ export class BookRepository {
         const result = await BookModel.findOne({
             where: { title: title },
             include: [{
-                attributes: ['name'],
+             
                 model: AuthorModel,
+                through: {attributes: []}
+
             }]
         });
 
@@ -58,13 +61,13 @@ export class BookRepository {
             where: { id: id },
             include: [
                 {
-                    attributes: ['name'],
+                
                     model: AuthorModel,
+                    through: {attributes: []}
 
                 },
             ]
         });
-
         return result;
     }
 
@@ -78,6 +81,9 @@ export class BookRepository {
     async delete(idBook: number): Promise<void> {
         const result = await BookModel.destroy({
             where: { id: idBook }
+        });
+        const bookInAuthor = await BookInAuthorModel.destroy({
+            where: { bookId: idBook }
         })
 
     }

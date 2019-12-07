@@ -44,7 +44,7 @@ export class BookModalComponent implements OnInit, OnDestroy {
       title: new FormControl(this.data.title, [Validators.required]),
       description: new FormControl(this.data.description),
       category: new FormControl(this.data.category, [Validators.required]),
-      author: new FormControl(this.data.author, [Validators.required]),
+      author: new FormControl(this.data.author , [Validators.required]),
       price: new FormControl(this.data.price),
       currency: new FormControl(this.data.currency),
     });
@@ -92,14 +92,7 @@ export class BookModalComponent implements OnInit, OnDestroy {
       (response: AuthorViewModel[]) => {
         this.autors = response;
         this.loading = false;
-      },
-      (error) => {
-        let authorArray = this.localStorageService.getItem("authors");
-        this.autors = JSON.parse(authorArray);
-        if (!authorArray) {
-          this.localStorageService.setItem("authors", []);
-        }
-        this.loading = false;
+        console.log(response)
       }
     )
   }

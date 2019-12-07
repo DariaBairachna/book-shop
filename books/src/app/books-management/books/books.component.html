@@ -38,7 +38,11 @@
 
         <ng-container matColumnDef="author">
             <th mat-header-cell class="table-header" *matHeaderCellDef mat-sort-header> Author </th>
-            <td mat-cell *matCellDef="let element"> {{element.authors}} </td>
+            <td mat-cell *matCellDef="let element">
+                <ul>
+                    <li *ngFor="let autor of element.authors">{{autor.name}}</li>
+                </ul>
+            </td>
         </ng-container>
 
         <ng-container matColumnDef="price">
@@ -49,7 +53,7 @@
         <ng-container matColumnDef="controls">
             <th mat-header-cell class="table-header controls-header" *matHeaderCellDef mat-sort-header> Control </th>
             <td mat-cell *matCellDef="let element">
-                <button mat-button class="control-btn" (click)="updateBook(element, element.author)">
+                <button mat-button class="control-btn" (click)="updateBook(element)">
                     <mat-icon aria-label="icon">edit</mat-icon>
                 </button>
                 <button mat-button class="control-btn" (click)="deleteBook(element.id)">

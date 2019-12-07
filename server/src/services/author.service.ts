@@ -2,15 +2,15 @@ import { AuthorDataModel} from "../models";
 import { AuthorRepository, AuthorModel } from "../repositories";
 import { inject, injectable } from "inversify";
 import { ApplicationError } from "../common";
+import { AuthorEntity } from "entities";
 @injectable()
 export class AuthorService {
     constructor(
         @inject(AuthorRepository) private _authorRepository: AuthorRepository) { }
 
-    async add(authorModel: AuthorDataModel): Promise<AuthorDataModel> {
+    async add(authorModel: AuthorDataModel): Promise<AuthorEntity> {
         const existedAuthor = await this._authorRepository.findOneByName(
             authorModel.name,
-
         );
         if (existedAuthor) {
             throw new ApplicationError("Author already exist!");
@@ -20,6 +20,12 @@ export class AuthorService {
             name: authorModel.name,
         });
         return authorEntity;
+    }
+
+    async get(): Promise<AuthorDataModel[]>{
+        const value = this._authorRepository.findAll();
+      
+        return value
     }
 
     async getById(id: number): Promise<AuthorDataModel> {

@@ -1,6 +1,8 @@
 import { AuthorEntity } from "../entities";
 import { Model } from "sequelize";
 import { injectable, id } from "inversify";
+import { BookModel } from "../repositories";
+import { AuthorDataModel } from "models";
 
 export interface AuthorSequelizeScheme extends AuthorEntity, Model<AuthorEntity> { }
 
@@ -21,8 +23,16 @@ export class AuthorRepository {
         return newValue;
     }
 
-    async findAll(): Promise<AuthorEntity[]> {
-        const authors = await AuthorModel.findAll();
+    async findAll(): Promise<AuthorDataModel[]> {
+        const authors = await AuthorModel.findAll(
+            {
+                include: [{
+                    attributes: ['title'],
+                    model: BookModel,
+                    through: {attributes: []}
+                }]
+            }
+        );
         return authors;
     }
 

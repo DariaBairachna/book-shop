@@ -12,14 +12,15 @@ import {
 import { AuthorService } from "../services";
 import { AuthorDataModel } from "models";
 import { AuthorModel } from "repositories";
+import { AuthorEntity } from "entities";
 
 @injectable()
 export class AuthorController implements Controller {
     @inject(AuthorService) private _authorService: AuthorService;
 
-
     constructor() {
         this.addAuthor = this.addAuthor.bind(this);
+        this.getAuthors = this.getAuthors.bind(this);
         this.getAuthorById = this.getAuthorById.bind(this);
         this.getAuthorByName = this.getAuthorByName.bind(this)
         this.updateAuthor = this.updateAuthor.bind(this);
@@ -28,14 +29,21 @@ export class AuthorController implements Controller {
 
     async addAuthor(
         request: RequestPost<AuthorDataModel>,
-        response: ResponseBase<AuthorDataModel>
+        response: ResponseBase<AuthorEntity>
     ) {
         const author = await this._authorService.add({ ...request.body });
         return response.send(author);
     }
 
+    async getAuthors(request: RequestGet<null>,
+        response: ResponseBase<AuthorDataModel[]>) {
+        const authors = await this._authorService.get( );
+        return response.send(authors);
+
+    }
+
     async getAuthorByName(
-        request: RequestGet<{name: string}>,
+        request: RequestGet<{ name: string }>,
         response: ResponseBase<AuthorDataModel>
     ) {
         const author = await this._authorService.getByName(
@@ -45,7 +53,7 @@ export class AuthorController implements Controller {
     }
 
     async getAuthorById(
-        request: RequestGet<{id: number}>,
+        request: RequestGet<{ id: number }>,
         response: ResponseBase<AuthorDataModel>
     ) {
         const author = await this._authorService.getById(
@@ -66,11 +74,11 @@ export class AuthorController implements Controller {
     }
 
     async deleteAuthor(
-        request: RequestDelete<{id: number}>,
+        request: RequestDelete<{ id: number }>,
         response: ResponseBase<boolean>
     ) {
         await this._authorService.delete(
-            request.path.id
+            request.params.id
         );
         return response.send(true);
     }
@@ -85,17 +93,27 @@ export class AuthorController implements Controller {
             type: "POST"
         });
         handlers.push({
-            route: `/${prefix}/get-author`,
+            route: `/${prefix}/get-authors`,
+            handlers: [<any>this.getAuthors],
+            type: "GET"
+        });
+        handlers.push({
+            route: `/${prefix}/get-author-by-id`,
             handlers: [<any>this.getAuthorById],
             type: "GET"
         });
         handlers.push({
-            route: `/${prefix}/update-author`,
+            route: `/${prefix}/get-author-by-name`,
+            handlers: [<any>this.getAuthorByName],
+            type: "GET"
+        });
+        handlers.push({
+            route: `/${prefix}/update-author/:id`,
             handlers: [<any>this.updateAuthor],
             type: "PUT"
         });
         handlers.push({
-            route: `/${prefix}/delete-author`,
+            route: `/${prefix}/delete-author/:id`,
             handlers: [<any>this.deleteAuthor],
             type: "DELETE"
         });

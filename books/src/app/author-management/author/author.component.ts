@@ -17,26 +17,27 @@ import { Subject } from 'rxjs';
 export class AuthorComponent implements OnInit {
   public authorData: AuthorViewModel[] = [];
   public displayedColumns: string[] = ['id', 'name', 'product', 'controls'];
-  public dataSource = new MatTableDataSource(this.authorData);
+  public dataSource: MatTableDataSource<AuthorViewModel>;
   public idValue: string;
   private destroyed: Subject<boolean> = new Subject<boolean>();
   public loading: boolean;
+  public filterValue: string;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
     public dialog: MatDialog,
     private authorService: AuthorService,
-    private localStorageService: LocalSlorageService,
   ) { }
 
   ngOnInit() {
-    this.dataSource.sort = this.sort;
+
     this.getAuthors();
   }
 
-  public generateId() {
-    return this.idValue = Math.random().toString(36).substr(2, 9);
-  }
+  public applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+   }
+
 
   public addAuthor(): void {
     const dialogRef = this.dialog.open(AuthorModalComponent, {
@@ -44,25 +45,12 @@ export class AuthorComponent implements OnInit {
       data: { titleModal: 'Add author', id: '', name: '' }
     });
     dialogRef.afterClosed().pipe(takeUntil(this.destroyed)).subscribe((result) => {
-      if (!result) {
-       return
-         
-      }  
-      result.id = this.generateId();
       const { titleModal, ...otherData } = result;
-    
       this.authorService.addAuthor(otherData).pipe(takeUntil(this.destroyed)).subscribe(
-        (response: AuthorViewModel) => {
-
-        },
-        (error) =>{
-          let authorArray = JSON.parse(this.localStorageService.getItem("authors")) ;
-          authorArray.push(otherData);
-          this.authorData = [...this.authorData, otherData];
-          this.localStorageService.setItem("authors", authorArray);
+        (result) => {
+          this.getAuthors();
         }
-
-      )
+      );
     });
   }
   public getAuthors(): void {
@@ -70,33 +58,18 @@ export class AuthorComponent implements OnInit {
     this.authorService.getAuthors().pipe(takeUntil(this.destroyed)).subscribe(
       (response: AuthorViewModel[]) => {
         this.authorData = response;
+        this.dataSource = new MatTableDataSource(this.authorData);
+        this.dataSource.sort = this.sort;
         this.loading = false;
-      },
-      (error) => {
-        let authorArray = this.localStorageService.getItem("authors");
-        this.authorData = JSON.parse(authorArray);
-        this.loading = false;
-        if (!authorArray) {
-          this.localStorageService.setItem("authors", []);
-        }
+        return this.authorData;
       }
     )
   }
 
-
-
-  public deleteAuthor(id: string): void {
+  public deleteAuthor(id: number): void {
     this.authorService.deleteAuthor(id).pipe(takeUntil(this.destroyed)).subscribe(
       (response) => {
-        if (response) {
-          let authors = this.authorData.filter((item: AuthorViewModel) => { item.id !== id });
-          this.authorData = authors;
-        }
-      },
-      (error) => {
-        let authors = this.authorData.filter((item: AuthorViewModel) => { item.id !== id; });
-        this.localStorageService.setItem("authors", authors);
-        this.authorData = authors;
+        this.getAuthors();
       }
     );
 
@@ -107,32 +80,14 @@ export class AuthorComponent implements OnInit {
       data: { titleModal: 'Update author', id: element.id, name: element.name }
     });
 
-    let updatingAuthorId: string;
     dialogRef.afterClosed().pipe(takeUntil(this.destroyed)).subscribe(result => {
       let { titleModal, ...otherData } = result;
-      updatingAuthorId = result.id
-      this.authorService.updateAuthor(updatingAuthorId, otherData).pipe(takeUntil(this.destroyed)).subscribe(
-        (response) => {
-          let authorArray = this.authorData;
-          authorArray.forEach((item: AuthorViewModel, index: number) => {
-            if (item.id === updatingAuthorId) {
-              let data = { ...otherData }
-              authorArray.splice(index, 1, data);
-            }
-          });
-        },
-        (error) => {
-          let authorArray = JSON.parse(this.localStorageService.getItem("authors"));
-          authorArray.forEach((item: AuthorViewModel, index: number) => {
-            if (item.id === updatingAuthorId) {
-              let data = { ...otherData }
-              authorArray.splice(index, 1, data);
-            }
-          });
-          this.authorData = authorArray;
-          this.localStorageService.setItem("authors", authorArray);
+      this.authorService.updateAuthor(result.id, otherData).pipe(takeUntil(this.destroyed)).subscribe(
+        (result) => {
+          this.getAuthors();
         }
       );
+
     });
   }
 

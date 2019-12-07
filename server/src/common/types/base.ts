@@ -31,7 +31,7 @@ export interface RequestPost<BodyType> {
 
 export interface RequestDelete<Params>{
   query: Params;
-  path: Params;
+  params: Params;
 }
 export interface RequestPut<Params>{
   params: Params;

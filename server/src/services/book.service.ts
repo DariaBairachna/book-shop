@@ -10,6 +10,7 @@ export class BookService {
         @inject(AuthorRepository) private _authorRepository: AuthorRepository) { }
 
     async addBook(bookModel: BookDataModel): Promise<BookEntity> {
+
         const existedBook = await this._bookRepository.findOneByTitle(
             bookModel.title,
 
@@ -17,7 +18,7 @@ export class BookService {
         if (existedBook) {
             throw new ApplicationError("Book already exist!");
         }
-        const bookEntity = await this._bookRepository.add({
+        const bookEntity = this._bookRepository.add({
             id: null,
             cover: bookModel.cover,
             title: bookModel.title,
@@ -26,24 +27,32 @@ export class BookService {
             price: bookModel.price,
             currency: bookModel.currency,
 
-        });
+        })
         return bookEntity;
     }
-
-    async addAuthorInBook(bookId: number, authorsId: Array<number>): Promise<void> {
-        authorsId.forEach((authorId) => {
+    public authorEntity: string[] = [];
+    async addAuthorInBook(bookId: number, authorsId: Array<number>): Promise<Array<string>> {
+        authorsId.map((authorId) => {
             return this._authorRepository.findOneById(authorId).then((author: AuthorEntity) => {
                 if (!author) {
                     return;
                 };
-                this.getBookById(bookId).then((book: BookModel) => {
+
+                this.getBookById(bookId).then(async (book: BookModel) => {
                     if (!book) {
                         return;
                     };
-                    return book.addAuthor(author, { through: BookInAuthorModel })
-                })
+                    return book.addAuthor(author, { through: BookInAuthorModel });
+                });
+                let authorffff: string[] = []
+                authorffff.push(author.name);
+                return authorffff
             })
+
         });
+        console.log(this.authorEntity)
+        return this.authorEntity
+
     }
 
 
@@ -69,15 +78,15 @@ export class BookService {
 
         return value;
     }
-    
+
     async updateAuthor(id: number, authorsId: Array<number>): Promise<boolean> {
         let authors: Array<any> = [];
         authorsId.map((authorId) => {
-           let test = this._authorRepository.findOneById(authorId).then((author: AuthorEntity) => {
+            let test = this._authorRepository.findOneById(authorId).then((author: AuthorEntity) => {
                 if (!author) {
                     return;
                 };
-               authors.push(author);
+                authors.push(author);
                 return author
 
             });
@@ -86,7 +95,7 @@ export class BookService {
             if (!book) {
                 return;
             };
-            book.setAuthors(authors, { through: BookInAuthorModel }); 
+            book.setAuthors(authors, { through: BookInAuthorModel });
             return book
         });
         return true;

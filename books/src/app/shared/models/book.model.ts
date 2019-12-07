@@ -1,10 +1,12 @@
+import { AuthorViewModel } from './author.model';
+
 export class BookViewModel {
-    id: string;
+    id: number;
     cover?: string;
     title: string;
     description: string;
     category: string;
-    authors: Array<string>;
+    authors: Array<number>;
     price: number;
     currency: string;
 }
