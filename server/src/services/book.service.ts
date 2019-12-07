@@ -38,15 +38,14 @@ export class BookService {
                     return;
                 };
 
-                this.getBookById(bookId).then(async (book: BookModel) => {
+                this.getBookById(bookId).then( (book: BookModel) => {
                     if (!book) {
                         return;
                     };
-                    return book.addAuthor(author, { through: BookInAuthorModel });
+                    book.addAuthor(author, { through: BookInAuthorModel });
                 });
-                let authorffff: string[] = []
-                authorffff.push(author.name);
-                return authorffff
+               this.authorEntity.push(author.name);
+
             })
 
         });
