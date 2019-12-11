@@ -36,8 +36,8 @@
                 </div>
                 <div class="field">
                     <label for="autor">Autor</label>
-                    <mat-select id="autor" name="autor" formControlName="author" multiple>
-                        <mat-option *ngFor="let author of autors" [value]="author">
+                    <mat-select id="autor" name="autor" formControlName="authors"  multiple>
+                        <mat-option *ngFor="let author of authors" [value]="author.id">
                             {{author.name}}
                         </mat-option>
                     </mat-select>

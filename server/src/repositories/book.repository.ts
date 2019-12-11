@@ -3,6 +3,7 @@ import { Model } from "sequelize";
 import { injectable, id } from "inversify";
 import { BookDataModel, BookInAuthorModel } from "../models";
 import { AuthorModel } from ".";
+import { type } from "os";
 
 export interface BookSequelizeScheme extends BookEntity, Model<BookEntity> { }
 
@@ -19,11 +20,12 @@ export class BookModel extends Model implements BookEntity {
     setAuthors: Function;
 }
 
+
 @injectable()
 export class BookRepository {
     constructor() { }
 
-    async add(entity: BookEntity): Promise<BookEntity> {
+    async add(entity: BookEntity): Promise<BookModel> {
         let newValue = await BookModel.create(entity);
         return newValue;
     }
@@ -33,7 +35,7 @@ export class BookRepository {
             {
                 include: [{
                     model: AuthorModel,
-                    through: {attributes: []}
+                    through: { attributes: [] }
                 }],
 
             }
@@ -45,9 +47,9 @@ export class BookRepository {
         const result = await BookModel.findOne({
             where: { title: title },
             include: [{
-             
+
                 model: AuthorModel,
-                through: {attributes: []}
+                through: { attributes: [] }
 
             }]
         });
@@ -61,21 +63,19 @@ export class BookRepository {
             where: { id: id },
             include: [
                 {
-                
                     model: AuthorModel,
-                    through: {attributes: []}
-
+                    through: { attributes: [] }
                 },
             ]
         });
         return result;
     }
 
-    async update(bookId: number, book: BookDataModel): Promise<BookDataModel> {
+    async update(id: number, book: BookEntity): Promise<boolean> {
         const result = await BookModel.update(book, {
-            where: { id: bookId },
-        })
-        return book
+            where: { id: id },
+        });
+        return true;
     }
 
     async delete(idBook: number): Promise<void> {

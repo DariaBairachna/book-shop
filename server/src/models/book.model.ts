@@ -5,5 +5,5 @@ export interface BookDataModel {
   category: string;
   price: number;
   currency: string;
-  author: Array<number>;
+  authors: Array<number>;
 }

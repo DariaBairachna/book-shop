@@ -6,8 +6,7 @@ import { AuthorDataModel } from "models";
 
 export interface AuthorSequelizeScheme extends AuthorEntity, Model<AuthorEntity> { }
 
-export class AuthorModel extends Model implements AuthorEntity  {
- 
+export class AuthorModel extends Model implements AuthorEntity{
     id: number;
     name: string;
     addBook: Function;
@@ -36,6 +35,13 @@ export class AuthorRepository {
         return authors;
     }
 
+    async findById(id: Array<number>): Promise<AuthorEntity[]> {
+        const result = await AuthorModel.findAll({
+            where: { id: id }
+        });
+        return result;
+    }
+
     async findOneByName(name: string): Promise<AuthorEntity> {
         const result = await AuthorModel.findOne({
             where: { name: name }
@@ -50,7 +56,6 @@ export class AuthorRepository {
         });
         return result;
     }
-
 
     async update(authorId: number, name: string): Promise<boolean> {
         const result = await AuthorModel.update({ name: name }, {

@@ -1,5 +1,5 @@
 export interface AuthorViewModel {
-    id: string;
+    id: number;
     name: string;
     books: Array<AuthorViewModel>
 }

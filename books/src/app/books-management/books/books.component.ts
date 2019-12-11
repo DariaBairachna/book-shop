@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { BookViewModel, AuthorInBookModel, AuthorViewModel } from 'app/shared/models';
+import { BookViewModel, AuthorViewModel, BookResponseViewModel } from 'app/shared/models';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
@@ -27,7 +27,6 @@ export class BooksComponent implements OnInit, OnDestroy {
   constructor(
     public dialog: MatDialog,
     private bookService: BookService,
-    private localStorageService: LocalSlorageService,
 
   ) {
     this.getBooks();
@@ -38,7 +37,7 @@ export class BooksComponent implements OnInit, OnDestroy {
   }
 
   public getBooks(): void {
-    this.loading = true
+    this.loading = true;
     this.bookService.getBooks().pipe(takeUntil(this.destroyed)).subscribe(
       (response: BookViewModel[]) => {
         this.bookData = response;
@@ -46,6 +45,7 @@ export class BooksComponent implements OnInit, OnDestroy {
         this.dataSource = new MatTableDataSource(this.bookData);
         this.dataSource.sort = this.sort;
         this.loading = false;
+        console.log(this.bookData)
       }
     );
   }
@@ -57,28 +57,18 @@ export class BooksComponent implements OnInit, OnDestroy {
   async addBook() {
     const dialogRef = this.dialog.open(BookModalComponent, {
       width: '70vw',
-      data: { titleModal: 'Add new book', id: '', title: '', description: '', category: '', author: '', currency: '', price: '', cover: '' }
+      data: { titleModal: 'Add new book', id: '', title: '', description: '', category: '', authors: [], currency: '', price: null, cover: '' }
     });
 
     dialogRef.afterClosed().pipe(takeUntil(this.destroyed)).subscribe(result => {
-      let authorNames: Array<string> = [];
-      result.author = result.author.map((element: AuthorViewModel)=>{
-        authorNames.push(element.name); 
-        return element.id;
-      })
+      this.loading = true;
       this.bookService.addBook(result).pipe(takeUntil(this.destroyed)).subscribe(
-        (response: BookViewModel) => {
-          // let bookCopy = this.bookData
-          // let newBook = {id: response.id,
-          //               name: response.title
-
-          // }
-          // bookCopy.push()
-         
-          console.log(response)
-
+        (value: BookResponseViewModel) => {
+          let newBook = { ...value.book, authors: value.authors }
+          this.bookData.push(newBook);
           this.dataSource = new MatTableDataSource(this.bookData);
-          this.getBooks();
+          this.dataSource.sort = this.sort;
+          this.loading = false;
         }
       );
 
@@ -94,26 +84,44 @@ export class BooksComponent implements OnInit, OnDestroy {
           });
           this.bookData = books;
           this.dataSource = new MatTableDataSource(this.bookData);
+          this.dataSource.sort = this.sort;
+          this.loading = false;
         }
       });
   }
 
 
   public updateBook(element: BookViewModel): void {
+    element.authorsId = element.authors.map((author: AuthorViewModel) => {
+      return author.id
+    })
     const dialogRef = this.dialog.open(BookModalComponent, {
       width: '70vw',
-      data: { titleModal: 'Update new book', id: element.id, title: element.title, description: element.description, category: element.category, author: element.authors, currency: element.currency, price: element.price, cover: element.cover }
+      data: { titleModal: 'Update new book', id: element.id, title: element.title, description: element.description, category: element.category,  authors: element.authorsId, currency: element.currency, price: element.price, cover: element.cover }
     });
-
     dialogRef.afterClosed().pipe(takeUntil(this.destroyed)).subscribe(result => {
       if (!result) {
         return
       }
-      let { titleModal, ...otherData } = result;
-      console.log(result)
-      this.bookService.updateBook(result.id, otherData).pipe(takeUntil(this.destroyed)).subscribe(
+      let book = {
+        id: element.id,
+        ...result
+      }
+      this.bookService.updateBook(book).pipe(takeUntil(this.destroyed)).subscribe(
         (response) => {
-          this.getBooks();
+          let indexBook: number;
+          this.bookData.forEach((item, index) => {
+            if (item.id === element.id) {
+              indexBook = index;
+            }
+            return indexBook;
+          });
+          this.bookData.splice(indexBook, 1, book);
+          console.log(this.bookData)
+          this.dataSource = new MatTableDataSource(this.bookData);
+          this.dataSource.sort = this.sort;
+          this.loading = false;
+
         }
       );
     });

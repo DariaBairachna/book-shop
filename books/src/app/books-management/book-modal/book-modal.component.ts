@@ -6,6 +6,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { FileHelper } from 'app/shared/helpers/file.helper';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { MatSelectChange } from '@angular/material/select';
 
 
 @Component({
@@ -17,7 +18,7 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 export class BookModalComponent implements OnInit, OnDestroy {
   public bookForm: FormGroup
   public categories: Array<CategoryViewModel>;
-  public autors: Array<AuthorViewModel>;
+  public authors: Array<AuthorViewModel>;
   public currencies: Array<string>;
   public author: string;
   public saveButtonData: ButtonViewModel = new ButtonViewModel;
@@ -28,7 +29,6 @@ export class BookModalComponent implements OnInit, OnDestroy {
     public dialogRef: MatDialogRef<BookModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private authorService: AuthorService,
-    private localStorageService: LocalSlorageService,
     private fileHelper: FileHelper,
     private formBuilder: FormBuilder,
   ) {
@@ -39,19 +39,20 @@ export class BookModalComponent implements OnInit, OnDestroy {
       loading: false,
       disabled: true,
     };
+    this.getAuthors();
 
     this.bookForm = this.formBuilder.group({
       title: new FormControl(this.data.title, [Validators.required]),
       description: new FormControl(this.data.description),
       category: new FormControl(this.data.category, [Validators.required]),
-      author: new FormControl(this.data.author , [Validators.required]),
+      authors: new FormControl(this.data.authors, [Validators.required]),
       price: new FormControl(this.data.price),
       currency: new FormControl(this.data.currency),
     });
+
   }
 
   ngOnInit() {
-    this.getAuthors();
     this.categories = [{
       id: "123456",
       category: "Book"
@@ -79,22 +80,25 @@ export class BookModalComponent implements OnInit, OnDestroy {
 
 
   public saveBook(): BookViewModel {
-    this.data = this.bookForm.value;
+    this.data = this.bookForm.value; 
+    // this.data.authors = this.authors.filter((author: AuthorViewModel) => {
+    //   return this.data.authorsId.filter((authorsId: number) => {
+    //     return author.id == authorsId;
+    //   });
+    // });
     this.saveButtonData.loading = true;
     return this.data;
   }
-
-
 
   public getAuthors(): void {
     this.loading = true;
     this.authorService.getAuthors().pipe(takeUntil(this.destroyed)).subscribe(
       (response: AuthorViewModel[]) => {
-        this.autors = response;
+        this.authors = response;
         this.loading = false;
-        console.log(response)
       }
     )
+
   }
 
   public uploadCover(event: any) {

@@ -6,7 +6,13 @@ export class BookViewModel {
     title: string;
     description: string;
     category: string;
-    authors: Array<number>;
+    authorsId: Array<number>;
+    authors?: Array<AuthorViewModel>;
     price: number;
     currency: string;
+}
+
+export interface BookResponseViewModel {
+    book: BookViewModel,
+    authors:  Array<AuthorViewModel>,
 }

@@ -37,9 +37,8 @@ export class BookController implements Controller {
         response: ResponseBase<object>
     ) {
         const book = await this._bookService.addBook({ ...request.body });
-        const author = await this._bookService.addAuthorInBook(book.id, request.body.author);
-        console.log(author)
-        return response.send({book: book, author: author});
+        const author = await this._bookService.addAuthorInBook(request.body.authors, book);
+        return response.send({ book: book, authors: author });
     }
 
     async getBooks(
@@ -51,38 +50,38 @@ export class BookController implements Controller {
     }
 
     async getBookByTitle(
-        request: RequestGet<{ title: string }>,
+        request: RequestGet<string>,
         response: ResponseBase<BookEntity>
     ) {
 
         const book = await this._bookService.getBookByTitle(
-            request.query.title,
+            request.query,
         );
 
         return response.send(book);
     }
 
     async getBookById(
-        request: RequestGet<{ id: number }>,
+        request: RequestGet<number>,
         response: ResponseBase<BookEntity>
     ) {
         const book = await this._bookService.getBookById(
-            request.query.id,
+            request.query,
         );
         return response.send(book);
     }
 
     async updateBook(
-        request: RequestPut<{ id: number, book: BookDataModel }>,
-        response: ResponseBase<boolean>
+        request: RequestPut<BookEntity>,
+        response: ResponseBase<AuthorEntity[]>
     ) {
-        const book = await this._bookService.update(
+        const newBook = await this._bookService.update(
             request.params.id,
-            request.body.book
-        );  console.log(request.body)
-        const updateAuthor = await this._bookService.updateAuthor(request.params.id, request.body.book.author);console.log( request.params.id,)
-      
-        return response.send(true);
+            request.body
+        );
+        const updatedAuthor = await this._bookService.updateAuthor(request.body.id, request.body.authors);
+        console.log("..............................................................authors" + JSON.stringify(updatedAuthor))
+        return response.send(updatedAuthor);
     }
 
     async deleteBook(
