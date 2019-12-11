@@ -80,7 +80,6 @@ export class BookController implements Controller {
             request.body
         );
         const updatedAuthor = await this._bookService.updateAuthor(request.body.id, request.body.authors);
-        console.log("..............................................................authors" + JSON.stringify(updatedAuthor))
         return response.send(updatedAuthor);
     }
 

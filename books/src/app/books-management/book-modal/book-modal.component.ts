@@ -81,11 +81,6 @@ export class BookModalComponent implements OnInit, OnDestroy {
 
   public saveBook(): BookViewModel {
     this.data = this.bookForm.value; 
-    // this.data.authors = this.authors.filter((author: AuthorViewModel) => {
-    //   return this.data.authorsId.filter((authorsId: number) => {
-    //     return author.id == authorsId;
-    //   });
-    // });
     this.saveButtonData.loading = true;
     return this.data;
   }

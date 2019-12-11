@@ -116,12 +116,11 @@ export class BooksComponent implements OnInit, OnDestroy {
             }
             return indexBook;
           });
+          book.authors = response;
           this.bookData.splice(indexBook, 1, book);
-          console.log(this.bookData)
           this.dataSource = new MatTableDataSource(this.bookData);
           this.dataSource.sort = this.sort;
           this.loading = false;
-
         }
       );
     });

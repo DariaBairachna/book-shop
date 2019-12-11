@@ -36,7 +36,7 @@ export class AuthorComponent implements OnInit {
 
   public applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
-   }
+  }
 
 
   public addAuthor(): void {
@@ -45,10 +45,14 @@ export class AuthorComponent implements OnInit {
       data: { titleModal: 'Add author', id: '', name: '' }
     });
     dialogRef.afterClosed().pipe(takeUntil(this.destroyed)).subscribe((result) => {
+      this.loading = false;
       const { titleModal, ...otherData } = result;
       this.authorService.addAuthor(otherData).pipe(takeUntil(this.destroyed)).subscribe(
-        (result) => {
-          this.getAuthors();
+        (response) => {
+          this.authorData.push(response);
+          this.dataSource = new MatTableDataSource(this.authorData);
+          this.dataSource.sort = this.sort;
+          this.loading = false;
         }
       );
     });
@@ -67,9 +71,18 @@ export class AuthorComponent implements OnInit {
   }
 
   public deleteAuthor(id: number): void {
+    this.loading = true;
     this.authorService.deleteAuthor(id).pipe(takeUntil(this.destroyed)).subscribe(
       (response) => {
-        this.getAuthors();
+        if (response) {
+          let authors = this.authorData.filter((item: AuthorViewModel) => {
+            return item.id !== id;
+          });
+          this.authorData = authors;
+          this.dataSource = new MatTableDataSource(this.authorData);
+          this.dataSource.sort = this.sort;
+          this.loading = false;
+        }
       }
     );
 
@@ -81,10 +94,21 @@ export class AuthorComponent implements OnInit {
     });
 
     dialogRef.afterClosed().pipe(takeUntil(this.destroyed)).subscribe(result => {
+      this.loading = true;
       let { titleModal, ...otherData } = result;
       this.authorService.updateAuthor(result.id, otherData).pipe(takeUntil(this.destroyed)).subscribe(
-        (result) => {
-          this.getAuthors();
+        (response) => {
+          let indexData: number;
+          this.authorData.forEach((item, index) => {
+            if (item.id === element.id) {
+              indexData = index;
+            }
+            return indexData;
+          });
+          this.authorData.splice(indexData, 1, otherData);
+          this.dataSource = new MatTableDataSource(this.authorData);
+          this.dataSource.sort = this.sort;
+          this.loading = false;
         }
       );
 

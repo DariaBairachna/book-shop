@@ -9,5 +9,4 @@ export class BookEntity {
     price: number;
     currency: string;
     authors?:Array<number>;
-    // authorsId?: Array<number>;
 }
